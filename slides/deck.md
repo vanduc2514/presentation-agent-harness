@@ -78,6 +78,8 @@ eyebrow: Evaluation Lens
 
 Rather than chase isolated features, evaluate the system through four coherent dimensions.
 
+![Cockpit control panel](https://images.unsplash.com/photo-1768554591368-292194a9f50c?w=1200&q=80&auto=format&fit=crop)
+
 | Code | Label | Prompt | Target |
 | --- | --- | --- | --- |
 | A | Context & Memory | What does it know? | context-memory |

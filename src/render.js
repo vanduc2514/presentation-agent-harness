@@ -1,12 +1,31 @@
 export function renderSlide(slide) {
   const attributes = renderPositionAttributes(slide.position);
+  const heroItem = slide.content.find((item) => item.type === "image");
+  const contentItems = heroItem ? slide.content.filter((item) => item.type !== "image") : slide.content;
+  const innerContent = `
+        ${slide.eyebrow ? `<p class="eyebrow">${slide.eyebrow}</p>` : ""}
+        <h1 class="slide-title">${slide.title}</h1>
+        ${contentItems.map(renderContentItem).join("\n        ")}`;
+
+  if (heroItem) {
+    return `
+      <section id="${slide.id}" class="${slide.classes}" ${attributes}>
+        <div class="step-split-layout">
+          <div class="step-shell step-content-card">
+            ${innerContent}
+          </div>
+          <figure class="hero-image-card">
+            <img src="${heroItem.src}" alt="${heroItem.alt}">
+          </figure>
+        </div>
+      </section>
+    `;
+  }
 
   return `
     <section id="${slide.id}" class="${slide.classes}" ${attributes}>
       <div class="step-shell">
-        ${slide.eyebrow ? `<p class="eyebrow">${slide.eyebrow}</p>` : ""}
-        <h1 class="slide-title">${slide.title}</h1>
-        ${slide.content.map(renderContentItem).join("\n        ")}
+        ${innerContent}
       </div>
     </section>
   `;

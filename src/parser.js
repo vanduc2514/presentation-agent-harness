@@ -88,6 +88,13 @@ function applyMarkdownContent(slide, nodes, layout) {
     }
 
     if (node.type === "paragraph") {
+      if (node.children.length === 1 && node.children[0].type === "image") {
+        const img = node.children[0];
+        slide.content.push({ type: "image", src: img.url, alt: img.alt || "" });
+        index += 1;
+        continue;
+      }
+
       const text = extractText(node).trim();
 
       if (text) {
