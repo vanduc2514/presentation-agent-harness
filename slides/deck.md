@@ -34,8 +34,6 @@ eyebrow: The Floor
 
 Any AI-native IDE that misses the basics is already disqualified.
 
-> AI capability cannot compensate for weak core ergonomics.
-
 | Capability | Why it matters |
 | --- | --- |
 | Speed | Response time must not break cognitive flow. |
@@ -59,8 +57,6 @@ eyebrow: Architecture Shift
 
 The model reasons, but the harness controls context, tools, state, and memory.
 
-> Model quality is necessary. Harness quality is differentiating.
-
 | Layer | Role |
 | --- | --- |
 | IDE / Harness Engine | Shapes prompts, manages tools, memory, session state, and safety boundaries. |
@@ -78,11 +74,9 @@ position:
   scale: 11
 eyebrow: Evaluation Lens
 ---
-# Four Groups Reveal Harness Quality
+# The Quality of Harness
 
 Rather than chase isolated features, evaluate the system through four coherent dimensions.
-
-> Each group answers a distinct question about trust and effectiveness.
 
 | Code | Label | Prompt | Target |
 | --- | --- | --- | --- |
@@ -107,8 +101,6 @@ eyebrow: Group A
 
 If context quality collapses, the agent hallucinates, repeats mistakes, and loses continuity.
 
-> Context fidelity compounds. Weak retention creates constant re-explanation overhead.
-
 | Capability | Why it matters |
 | --- | --- |
 | Live Repo Context | Reads Git state, structure, README, and uncommitted changes. |
@@ -116,7 +108,7 @@ If context quality collapses, the agent hallucinates, repeats mistakes, and lose
 | Context Compaction | Compresses without dropping key decisions when windows fill up. |
 | Session Resumption | Recovers working memory across pauses, crashes, and next-day restarts. |
 
-Note: A strong harness understands the current repository state, not just the open file.
+> Context fidelity compounds. Weak retention creates constant re-explanation overhead.
 
 <!-- slide -->
 ---
@@ -134,8 +126,6 @@ eyebrow: Group B
 
 Autonomy without runtime control is risk. Customization turns the agent from generic to team-native.
 
-> Developers need sovereignty over the loop, not just a better autocomplete.
-
 ## Runtime Sovereignty
 
 - Pause and steer mid-task without losing state.
@@ -149,6 +139,8 @@ Autonomy without runtime control is risk. Customization turns the agent from gen
 - Drive consistency across sessions with repeatable protocols.
 - Hook agents into saves, test failures, CI, or PR events.
 - Swap models by task, budget, or local endpoint.
+
+> Developers need sovereignty over the loop, not just a better autocomplete.
 
 <!-- slide -->
 ---
@@ -166,8 +158,6 @@ eyebrow: Group C
 
 Agents write files, run commands, call APIs, and inspect secrets. Trust requires both enforcement and traces.
 
-> A harness is only safe when risky actions are constrained and fully inspectable.
-
 | Capability | Why it matters |
 | --- | --- |
 | Tool Controls | Per-tool permissions and approval gates for destructive or networked actions. |
@@ -176,6 +166,8 @@ Agents write files, run commands, call APIs, and inspect secrets. Trust requires
 | Debug Logs | Captures tool calls, prompts, responses, and chronology for audits. |
 | Trace Navigation | Lets you inspect hidden context and the exact point reasoning diverged. |
 | Behavioral Correction | Turns findings into persistent rules without resetting all progress. |
+
+> A harness is only safe when risky actions are constrained and fully inspectable.
 
 <!-- slide -->
 ---
@@ -193,14 +185,14 @@ eyebrow: Group D
 
 The strongest harnesses extend beyond the editor into workflow orchestration.
 
-> Reach matters when the engineering loop spans specs, CI, browsers, and long-running jobs.
-
 | Capability | Why it matters |
 | --- | --- |
 | Spec-Driven Development | Translate intent into requirements, design, tasks, and implementation. |
 | Agent-First Manager UI | Track multiple parallel workflows from a mission-control view. |
 | CLI + Cloud Agents | Invoke from scripts and run work that outlives the local session. |
 | Browser / CI / Test Automation | Close loops outside the file editor and pull results back in. |
+
+> Reach matters when the engineering loop spans specs, CI, browsers, and long-running jobs.
 
 <!-- slide -->
 ---
@@ -226,8 +218,6 @@ There is no substitute for two honest hours in your own codebase with your own c
 | 02 | Use the same prompt and a fixed time box in every IDE. |
 | 03 | Track context fidelity, correction rate, and control. |
 | 04 | Score harness quality, not code generation theatrics. |
-
-Note: Watch whether the agent asks clarifying questions, remembers earlier choices, and leaves you feeling in control.
 
 <!-- slide -->
 ---
