@@ -1,6 +1,6 @@
 ---
 name: impress-js-prezi-design-patterns
-description: Build Prezi-like non-linear presentations with impress.js using structural design patterns. Use when creating interactive storytelling presentations with 3D slide transitions, organizing complex slide hierarchies, or implementing dynamic presentation navigation systems.
+description: Build Prezi-like non-linear presentations with impress.js using structural design patterns. Use when creating interactive storytelling presentations with slide transitions, organizing complex slide hierarchies, or implementing dynamic presentation navigation systems.
 ---
 
 # Impress.js Prezi-Style Presentations with Design Patterns
@@ -9,7 +9,7 @@ Non-linear storytelling presentations using impress.js data attributes and struc
 
 ## When to Apply
 
-- Building non-linear storytelling presentations with 3D navigation
+- Building non-linear storytelling presentations with spatial navigation
 - Creating complex slide hierarchies with conditional paths
 - Implementing custom animation sequences between presentation segments
 
@@ -37,13 +37,13 @@ Non-linear storytelling presentations using impress.js data attributes and struc
 }
 ```
 
-**3D Positioning**: Combine multiple data attributes for complex layouts
+**Spatial Positioning**: Combine multiple data attributes for complex layouts
 
 ```html
 <!-- WRONG - only using x,y positioning -->
 <div class="step" data-x="1000" data-y="500">
 
-<!-- RIGHT - 3D space with rotation and scale -->
+<!-- RIGHT - spatial space with rotation and scale -->
 <div class="step" 
      data-x="2000" 
      data-y="1000" 
@@ -256,7 +256,8 @@ class SlideTransition {
 
 ## Common Mistakes
 
-- **Linear thinking** — Don't position slides sequentially. Use 3D space creatively
+- **Linear thinking** — Don't position slides sequentially. Use spacial creatively
 - **Missing state classes** — Always use `.present`, `.future`, `.past` for animations
 - **Hardcoded navigation** — Implement conditional paths with goto() API instead of fixed sequences
 - **Overcomplicated hierarchies** — Keep Composite pattern simple; avoid deep nesting beyond 3 levels
+- **NO GPU RENDERING** - Do not use any css class that involve in expensive cost of using gpu render
