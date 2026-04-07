@@ -67,6 +67,8 @@ function normalizePosition(position, index) {
 }
 
 function applyMarkdownContent(slide, nodes, layout) {
+	slide.content = [];
+	let paragraphCount = 0;
 	let index = 0;
 
 	while (index < nodes.length) {
@@ -79,37 +81,48 @@ function applyMarkdownContent(slide, nodes, layout) {
 		}
 
 		if (layout === "dual-columns" && node.type === "heading" && node.depth === 2) {
-			slide.dualColumns = parseDualColumns(nodes.slice(index));
-			break;
+			const { data, consumed } = parseDualColumns(nodes.slice(index));
+			slide.content.push({ type: "dualColumns", data });
+			index += consumed;
+			continue;
 		}
 
 		if (node.type === "paragraph") {
-			assignParagraph(slide, extractText(node));
-			index += 1;
-			continue;
-		}
+			const text = extractText(node).trim();
 
-		if (node.type === "blockquote") {
-			slide.takeaway ??= extractText(node);
-			index += 1;
-			continue;
-		}
-
-		if (node.type === "list") {
-			const items = extractListItems(node);
-
-			if (node.ordered) {
-				slide.numberedPoints ??= items;
-			} else {
-				slide.points ??= items;
+			if (text) {
+				if (/^Note:/i.test(text)) {
+					slide.content.push({ type: "note", data: text.replace(/^Note:\s*/i, "") });
+				} else {
+					const paragraphType = paragraphCount === 0 ? "lead" : paragraphCount === 1 ? "summary" : "note";
+					slide.content.push({ type: paragraphType, data: text });
+					paragraphCount += 1;
+				}
 			}
 
 			index += 1;
 			continue;
 		}
 
+		if (node.type === "blockquote") {
+			slide.content.push({ type: "takeaway", data: extractText(node) });
+			index += 1;
+			continue;
+		}
+
+		if (node.type === "list") {
+			slide.content.push({ type: node.ordered ? "numberedPoints" : "points", data: extractListItems(node) });
+			index += 1;
+			continue;
+		}
+
 		if (node.type === "table") {
-			assignTable(slide, layout, extractTableRows(node));
+			const bodyRows = extractTableRows(node).slice(1);
+
+			if (bodyRows.length) {
+				slide.content.push({ type: tableTypeFromLayout(layout), data: bodyRows });
+			}
+
 			index += 1;
 			continue;
 		}
@@ -118,66 +131,22 @@ function applyMarkdownContent(slide, nodes, layout) {
 	}
 }
 
-function assignParagraph(slide, text) {
-	const value = text.trim();
-
-	if (!value) {
-		return;
-	}
-
-	if (/^Note:/i.test(value)) {
-		slide.note = value.replace(/^Note:\s*/i, "");
-		return;
-	}
-
-	if (!slide.lead) {
-		slide.lead = value;
-		return;
-	}
-
-	if (!slide.summary) {
-		slide.summary = value;
-		return;
-	}
-
-	slide.note ??= value;
-}
-
-function assignTable(slide, layout, rows) {
-	const bodyRows = rows.slice(1);
-
-	if (!bodyRows.length) {
-		return;
-	}
-
-	if (layout === "grid") {
-		slide.gridItems = bodyRows.map(([label, text]) => [label, text]);
-		return;
-	}
-
-	if (layout === "stack") {
-		slide.stackItems = bodyRows.map(([label, text]) => [label, text]);
-		return;
-	}
-
-	if (layout === "nav") {
-		slide.navCards = bodyRows.map(([code, label, text, target]) => [code, label, text, target]);
-		return;
-	}
-
-	if (layout === "timeline") {
-		slide.timelineItems = bodyRows.map(([step, text]) => [step, text]);
-	}
+function tableTypeFromLayout(layout) {
+	if (layout === "stack") return "stack";
+	if (layout === "nav") return "nav";
+	if (layout === "timeline") return "timeline";
+	return "grid";
 }
 
 function parseDualColumns(nodes) {
 	const sections = [];
+	let index = 0;
 
-	for (let index = 0; index < nodes.length; index += 1) {
+	while (index < nodes.length) {
 		const node = nodes[index];
 
 		if (node.type !== "heading" || node.depth !== 2) {
-			continue;
+			break;
 		}
 
 		const section = { title: extractText(node), items: [] };
@@ -188,15 +157,15 @@ function parseDualColumns(nodes) {
 			const nextNode = nodes[index];
 
 			if (nextNode.type === "heading" && nextNode.depth === 2) {
-				index -= 1;
 				break;
 			}
 
 			if (nextNode.type === "list") {
 				section.items.push(...extractListItems(nextNode));
+				index += 1;
+			} else {
+				break;
 			}
-
-			index += 1;
 		}
 
 		sections.push(section);
@@ -207,10 +176,13 @@ function parseDualColumns(nodes) {
 	}
 
 	return {
-		leftTitle: sections[0].title,
-		leftItems: sections[0].items,
-		rightTitle: sections[1].title,
-		rightItems: sections[1].items
+		data: {
+			leftTitle: sections[0].title,
+			leftItems: sections[0].items,
+			rightTitle: sections[1].title,
+			rightItems: sections[1].items
+		},
+		consumed: index
 	};
 }
 

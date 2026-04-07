@@ -6,20 +6,27 @@ export function renderSlide(slide) {
       <div class="step-shell">
         ${slide.eyebrow ? `<p class="eyebrow">${slide.eyebrow}</p>` : ""}
         <h1 class="slide-title">${slide.title}</h1>
-        ${slide.lead ? `<p class="lead">${slide.lead}</p>` : ""}
-        ${slide.summary ? `<p class="summary">${slide.summary}</p>` : ""}
-        ${slide.takeaway ? `<div class="takeaway">${slide.takeaway}</div>` : ""}
-        ${slide.numberedPoints ? renderNumberedPoints(slide.numberedPoints) : ""}
-        ${slide.points ? renderPoints(slide.points) : ""}
-        ${slide.gridItems ? renderGridItems(slide.gridItems) : ""}
-        ${slide.stackItems ? renderStackItems(slide.stackItems) : ""}
-        ${slide.navCards ? renderNavCards(slide.navCards) : ""}
-        ${slide.dualColumns ? renderDualColumns(slide.dualColumns) : ""}
-        ${slide.timelineItems ? renderTimeline(slide.timelineItems) : ""}
-        ${slide.note ? `<p class="note">${slide.note}</p>` : ""}
+        ${slide.content.map(renderContentItem).join("\n        ")}
       </div>
     </section>
   `;
+}
+
+function renderContentItem(item) {
+  switch (item.type) {
+    case "lead":           return `<p class="lead">${item.data}</p>`;
+    case "summary":        return `<p class="summary">${item.data}</p>`;
+    case "note":           return `<p class="note">${item.data}</p>`;
+    case "takeaway":       return `<div class="takeaway">${item.data}</div>`;
+    case "points":         return renderPoints(item.data);
+    case "numberedPoints": return renderNumberedPoints(item.data);
+    case "grid":           return renderGridItems(item.data);
+    case "stack":          return renderStackItems(item.data);
+    case "nav":            return renderNavCards(item.data);
+    case "timeline":       return renderTimeline(item.data);
+    case "dualColumns":    return renderDualColumns(item.data);
+    default:               return "";
+  }
 }
 
 function renderPositionAttributes(position) {
