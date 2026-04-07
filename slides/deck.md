@@ -108,8 +108,6 @@ If context quality collapses, the agent hallucinates, repeats mistakes, and lose
 | Context Compaction | Compresses without dropping key decisions when windows fill up. |
 | Session Resumption | Recovers working memory across pauses, crashes, and next-day restarts. |
 
-> Context fidelity compounds. Weak retention creates constant re-explanation overhead.
-
 <!-- slide -->
 ---
 id: control-customization
@@ -140,8 +138,6 @@ Autonomy without runtime control is risk. Customization turns the agent from gen
 - Hook agents into saves, test failures, CI, or PR events.
 - Swap models by task, budget, or local endpoint.
 
-> Developers need sovereignty over the loop, not just a better autocomplete.
-
 <!-- slide -->
 ---
 id: safety-observability
@@ -167,8 +163,6 @@ Agents write files, run commands, call APIs, and inspect secrets. Trust requires
 | Trace Navigation | Lets you inspect hidden context and the exact point reasoning diverged. |
 | Behavioral Correction | Turns findings into persistent rules without resetting all progress. |
 
-> A harness is only safe when risky actions are constrained and fully inspectable.
-
 <!-- slide -->
 ---
 id: extended-capabilities
@@ -191,8 +185,6 @@ The strongest harnesses extend beyond the editor into workflow orchestration.
 | Agent-First Manager UI | Track multiple parallel workflows from a mission-control view. |
 | CLI + Cloud Agents | Invoke from scripts and run work that outlives the local session. |
 | Browser / CI / Test Automation | Close loops outside the file editor and pull results back in. |
-
-> Reach matters when the engineering loop spans specs, CI, browsers, and long-running jobs.
 
 <!-- slide -->
 ---
