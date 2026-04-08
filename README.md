@@ -4,6 +4,8 @@ A non-linear presentation on how to assess modern IDEs as agent harnesses rather
 
 Live at [slides.nvduc.dev](https://slides.nvduc.dev).
 
+*Đọc bằng tiếng Việt: [README.vi-VN.md](./README.vi-VN.md)*
+
 ## Background
 
 As AI-native IDEs have multiplied, the common approach to evaluation — comparing model quality or autocomplete speed — misses the more meaningful question: how well does the IDE manage context, tools, state, and control on behalf of the developer?
