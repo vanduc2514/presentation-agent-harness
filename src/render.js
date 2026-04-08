@@ -127,15 +127,18 @@ function renderNavCards(cards) {
 }
 
 function renderDualColumns(columns) {
+  const leftAttrs = columns.leftTarget ? ` class="column-card column-card--link" data-goto="${columns.leftTarget}"` : ` class="column-card"`;
+  const rightAttrs = columns.rightTarget ? ` class="column-card column-card--link" data-goto="${columns.rightTarget}"` : ` class="column-card"`;
+
   return `
     <div class="dual-columns">
-      <section class="column-card">
+      <section${leftAttrs}>
         <h3>${columns.leftTitle}</h3>
         <ul>
           ${columns.leftItems.map((item) => `<li>${item}</li>`).join("")}
         </ul>
       </section>
-      <section class="column-card">
+      <section${rightAttrs}>
         <h3>${columns.rightTitle}</h3>
         <ul>
           ${columns.rightItems.map((item) => `<li>${item}</li>`).join("")}

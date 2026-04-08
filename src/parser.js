@@ -156,7 +156,9 @@ function parseDualColumns(nodes) {
       break;
     }
 
-    const section = { title: extractText(node), items: [] };
+    const linkChild = node.children && node.children.find((c) => c.type === "link");
+    const target = linkChild ? linkChild.url.replace(/^#/, "") : null;
+    const section = { title: extractText(node), items: [], target };
 
     index += 1;
 
@@ -186,8 +188,10 @@ function parseDualColumns(nodes) {
     data: {
       leftTitle: sections[0].title,
       leftItems: sections[0].items,
+      leftTarget: sections[0].target,
       rightTitle: sections[1].title,
-      rightItems: sections[1].items
+      rightItems: sections[1].items,
+      rightTarget: sections[1].target
     },
     consumed: index
   };
