@@ -300,9 +300,33 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     + 'Next${SVG_NEXT}</button>';
   document.body.appendChild(nav);
 
+  // ── Viewport scaling ───────────────────────────────────────────────────────
+  // impress.js hardcodes windowScale=1, so we apply CSS transform to #impress
+  // to center and scale the 1600×900 canvas to fit the viewport.
+  // Only applied for viewport ≥ 768px; smaller viewports use CSS media queries.
+  var PRES_W = 1600, PRES_H = 900;
+  function scalePres() {
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    if (vw < 768) return;
+    var s = Math.min(vw / PRES_W, vh / PRES_H, 1);
+    var tx = (vw - PRES_W * s) / 2;
+    var ty = (vh - PRES_H * s) / 2;
+    impressEl.style.position = 'fixed';
+    impressEl.style.top = '0';
+    impressEl.style.left = '0';
+    impressEl.style.width = PRES_W + 'px';
+    impressEl.style.height = PRES_H + 'px';
+    impressEl.style.transformOrigin = 'top left';
+    impressEl.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+  }
+  scalePres();
+
   // ── Init impress ───────────────────────────────────────────────────────────
   var api = window.impress();
   api.init();
+
+  window.addEventListener('resize', scalePres);
 
   document.getElementById('nav-home').addEventListener('click', function () {
     api.goto(steps[0]);
