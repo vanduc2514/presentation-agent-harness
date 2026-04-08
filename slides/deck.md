@@ -105,7 +105,7 @@ eyebrow: Group A
 
 If context quality collapses, the agent hallucinates, repeats mistakes, and loses continuity.
 
-![Session and context window diagram](/public/diagrams/chat-session-reference.png)
+![Session and context window diagram](/diagrams/chat-session-reference.png)
 
 | Capability | Why it matters |
 | --- | --- |
