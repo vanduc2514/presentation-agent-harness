@@ -21,6 +21,8 @@ const OUTPUT_DIR = path.join(ROOT, 'output');
 const HTML_OUT  = path.join(OUTPUT_DIR, 'index.html');
 const DIAGRAM_SRC = path.join(ROOT, 'public', 'diagrams');
 const DIAGRAM_DST = path.join(OUTPUT_DIR, 'diagrams');
+const README_VI_SRC = path.join(ROOT, 'README.vi-VN.md');
+const README_VI_DST = path.join(OUTPUT_DIR, 'README.vi-VN.md');
 
 // ── Grid icons (replicated from src/render.js) ────────────────────────────────
 const GRID_ICONS = {
@@ -287,6 +289,16 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     }
   });
 
+  // ── Vietnamese README button ───────────────────────────────────────────────
+  var langBtn = document.createElement('a');
+  langBtn.className = 'readme-lang-btn';
+  langBtn.href = './README.vi-VN.md';
+  langBtn.target = '_blank';
+  langBtn.rel = 'noopener noreferrer';
+  langBtn.title = 'Xem bản tiếng Việt';
+  langBtn.textContent = '🇻🇳 Tiếng Việt';
+  document.body.appendChild(langBtn);
+
   // ── Navigation bar ─────────────────────────────────────────────────────────
   var nav = document.createElement('nav');
   nav.className = 'slide-nav';
@@ -405,6 +417,12 @@ markpress(markdownSrc, markpressOptions)
         fs.copyFileSync(path.join(DIAGRAM_SRC, file), path.join(DIAGRAM_DST, file));
       });
       console.log('Diagrams copied to output/diagrams/');
+    }
+
+    // Copy Vietnamese README to output so the lang button link resolves
+    if (fs.existsSync(README_VI_SRC)) {
+      fs.copyFileSync(README_VI_SRC, README_VI_DST);
+      console.log('Vietnamese README copied to output/README.vi-VN.md');
     }
 
     fs.writeFileSync(HTML_OUT, html, 'utf8');

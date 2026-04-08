@@ -455,6 +455,44 @@ body {
   --accent-color: var(--closing-accent);
 }
 
+/* ── Vietnamese README button ─────────────── */
+
+.readme-lang-btn {
+  position: fixed;
+  top: 12px;
+  right: 16px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 16px;
+  border-radius: 999px;
+  background: rgba(255, 254, 250, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 16px rgba(15, 23, 42, 0.1);
+  color: var(--ink-medium);
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-decoration: none;
+  transition: background 0.15s, color 0.15s;
+}
+
+.readme-lang-btn:hover,
+.readme-lang-btn:focus-visible {
+  background: rgba(15, 23, 42, 0.07);
+  color: var(--ink-strong);
+  outline: none;
+}
+
+.readme-lang-btn:active {
+  background: rgba(15, 23, 42, 0.12);
+  color: var(--ink-strong);
+}
+
 /* ── Slide navigation bar ──────────────────── */
 
 .slide-nav {
