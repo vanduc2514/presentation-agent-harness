@@ -23,7 +23,7 @@ jobs:
         run: npm ci --no-audit
 
       - name: Run npm build
-        run: npm run build
+        run: npm run build:markpress
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3

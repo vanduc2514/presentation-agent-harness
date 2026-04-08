@@ -1,6 +1,6 @@
 FROM busybox:1.35
 
-COPY dist /www
+COPY output /www
 
 EXPOSE 80
 
