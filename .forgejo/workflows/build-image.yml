@@ -28,5 +28,5 @@ jobs:
           context: .
           push: false
           tags: |
-            ${{ github.repository_owner }}/resume:${{ github.sha }}
-            ${{ github.repository_owner }}/resume:${{ github.ref_name }}
+            ${{ github.repository_owner }}/presentation-agent-harness:${{ github.sha }}
+            ${{ github.repository_owner }}/presentation-agent-harness:${{ github.ref_name }}
