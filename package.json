@@ -4,21 +4,11 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview",
     "build:markpress": "node build.cjs",
     "preview:markpress": "npx serve output -l 4173"
   },
-  "dependencies": {
-    "impress.js": "^1.1.0",
-    "remark-gfm": "^4.0.1",
-    "remark-parse": "^11.0.0",
-    "unified": "^11.0.5",
-    "yaml": "^2.8.3"
-  },
+  "dependencies": {},
   "devDependencies": {
-    "markpress": "^4.0.0",
-    "vite": "^7.1.0"
+    "markpress": "^4.0.0"
   }
 }
