@@ -10,5 +10,10 @@
   "dependencies": {},
   "devDependencies": {
     "markpress": "^4.0.0"
+  },
+  "overrides": {
+    "first-mate": "^7.4.3",
+    "oniguruma": "^7.2.3",
+    "season": "^6.0.2"
   }
 }
