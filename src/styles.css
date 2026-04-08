@@ -243,6 +243,16 @@ body {
   line-height: 1.25;
 }
 
+.info-card-icon {
+  display: block;
+  width: 36px;
+  height: 36px;
+  margin-bottom: 10px;
+  object-fit: contain;
+  filter: invert(35%) sepia(72%) saturate(480%) hue-rotate(138deg) brightness(88%) contrast(95%);
+  opacity: 0.9;
+}
+
 .info-card h3,
 .stack-card .stack-label,
 .column-card h3 {

@@ -1,3 +1,10 @@
+const GRID_ICONS = {
+  "Speed":      "https://cdn-icons-png.flaticon.com/128/53/53128.png",
+  "Navigation": "https://cdn-icons-png.flaticon.com/128/660/660333.png",
+  "Execution":  "https://cdn-icons-png.flaticon.com/128/9640/9640682.png",
+  "Debugger":   "https://cdn-icons-png.flaticon.com/128/1541/1541402.png",
+};
+
 export function renderSlide(slide) {
   const attributes = renderPositionAttributes(slide.position);
   const heroItem = slide.content.find((item) => item.type === "image");
@@ -79,12 +86,18 @@ function renderGridItems(items) {
     <div class="grid-panel">
       ${items
         .map(
-          ([label, text]) => `
+          ([label, text]) => {
+            const iconUrl = GRID_ICONS[label];
+            const iconHtml = iconUrl
+              ? `<img class="info-card-icon" src="${iconUrl}" alt="${label} icon">`
+              : "";
+            return `
             <article class="info-card">
-              <h3>${label}</h3>
+              ${iconHtml}<h3>${label}</h3>
               <p>${text}</p>
             </article>
-          `
+          `;
+          }
         )
         .join("")}
     </div>
