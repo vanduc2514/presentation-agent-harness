@@ -6,7 +6,7 @@ position:
   y: -1800
   rotate: -8
   scale: 1.0
-eyebrow: Narrative Path
+eyebrow: Opening
 ---
 # Evaluating IDEs for the AI Agent Era
 
@@ -28,7 +28,7 @@ position:
   y: -1200
   rotate: -14
   scale: 1.0
-eyebrow: The Floor
+eyebrow: The Classic IDE
 ---
 # An Elite IDE Still Wins on Fundamentals
 
@@ -193,11 +193,41 @@ Agents write files, run commands, call APIs, and inspect secrets. Trust requires
 | Capability | Why it matters |
 | --- | --- |
 | Tool Controls | Per-tool permissions and approval gates for destructive or networked actions. |
-| Prompt Injection Protection | Sanitizes hostile content from comments, tools, and external responses. |
+| Trace Navigation | Lets you inspect hidden context and the exact point reasoning diverged. |
 | Isolation | Runs in sandboxes, containers, or remote environments when needed. |
 | Debug Logs | Captures tool calls, prompts, responses, and chronology for audits. |
-| Trace Navigation | Lets you inspect hidden context and the exact point reasoning diverged. |
+| Prompt Injection Protection | Sanitizes hostile content from comments, tools, and external responses. |
 | Behavioral Correction | Turns findings into persistent rules without resetting all progress. |
+
+<!-- slide -->
+---
+id: safety-example
+classes: step step-card theme-c
+position:
+  x: 10200
+  y: 4500
+  rotate: 8
+  scale: 1.0
+eyebrow: Group C · Safety
+---
+# Safety Example
+
+A hands-on walk-through of per-tool permissions and approval gates.
+
+<!-- slide -->
+---
+id: observability-example
+classes: step step-card theme-c
+position:
+  x: 10200
+  y: 6800
+  rotate: -6
+  scale: 1.0
+eyebrow: Group C · Observability
+---
+# Observability Example
+
+A hands-on walk-through of troubleshooting AI Agent.
 
 <!-- slide -->
 ---
@@ -224,6 +254,21 @@ The strongest harnesses extend beyond the editor into workflow orchestration.
 
 <!-- slide -->
 ---
+id: extended-feature-example
+classes: step step-card theme-d
+position:
+  x: 16800
+  y: -4800
+  rotate: 3
+  scale: 1.0
+eyebrow: Group D · Extended Features
+---
+# Extended Feaures Example
+
+A hands-on walk-through of translating intent into requirements and implementation.
+
+<!-- slide -->
+---
 id: self-benchmark
 classes: step step-card theme-benchmark
 layout: timeline
@@ -236,7 +281,7 @@ eyebrow: Evaluation Method
 ---
 # Run a Self-Benchmark
 
-There is no substitute for two honest hours in your own codebase with your own constraints.
+There is no substitute for X honest hours in your own codebase with your own constraints.
 
 > The tool is not the problem. Getting work done is the problem.
 
@@ -245,7 +290,7 @@ There is no substitute for two honest hours in your own codebase with your own c
 | 01 | Pick a representative multi-file task. |
 | 02 | Use the same prompt and a fixed time box in every IDE. |
 | 03 | Track context fidelity, correction rate, and control. |
-| 04 | Score harness quality, not code generation theatrics. |
+| 04 | Score harness quality, not code generation metrics. |
 
 <!-- slide -->
 ---
