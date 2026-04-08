@@ -1,31 +1,31 @@
-# Đánh Giá IDE Trong Kỷ Nguyên AI Agent
+# Đánh giá IDE trong kỷ nguyên AI Agent
 
-Một bài thuyết trình phi tuyến tính về cách đánh giá các IDE hiện đại như các bộ khai thác agent thay vì chỉ là trình soạn thảo code. Các slide đi qua những kiến thức nền tảng vẫn còn định nghĩa một IDE có khả năng, cách kiến trúc thay đổi khi có AI agent tham gia, và một khung đánh giá có cấu trúc về chất lượng khai thác trên bốn chiều kích.
+Đây là bài thuyết trình về việc nhìn nhận các IDE hiện đại theo một góc độ khác — không phải là công cụ soạn thảo code, mà là nền tảng để chạy AI agent. Bài này đi qua những yếu tố cốt lõi tạo nên một IDE tốt, lý do tại sao kiến trúc thay đổi khi có agent tham gia, và cách đánh giá khả năng "harness" theo bốn tiêu chí cụ thể.
 
-Trực tiếp tại [slides.nvduc.dev](https://slides.nvduc.dev).
+Xem trực tiếp tại [slides.nvduc.dev](https://slides.nvduc.dev).
 
-## Bối Cảnh
+## Câu chuyện
 
-Khi các IDE gốc AI ngày càng nhiều, cách tiếp cận đánh giá thông thường — so sánh chất lượng mô hình hay tốc độ tự động hoàn thành — bỏ lỡ câu hỏi quan trọng hơn: IDE quản lý ngữ cảnh, công cụ, trạng thái và kiểm soát thay mặt nhà phát triển tốt như thế nào?
+Dạo gần đây IDE tích hợp AI mọc lên như nấm. Cách đánh giá phổ biến nhất vẫn là: model này mạnh không, autocomplete nhanh không? Nhưng đó không phải câu hỏi quan trọng nhất. Điều thực sự cần hỏi là: IDE đó có giúp agent làm việc hiệu quả không, hay chỉ là thêm một lớp UI trên cùng một LLM?
 
-[Components of a Coding Agent](https://magazine.sebastianraschka.com/p/components-of-a-coding-agent) của Sebastian Raschka làm rõ sự phân biệt này. Một coding agent không chỉ là LLM — đó là sự kết hợp của một vòng lặp lập kế hoạch, thực thi công cụ, bộ nhớ và lớp điều phối gắn kết tất cả lại với nhau. IDE chính là lớp điều phối đó. Cách nó định hình các prompt, quản lý cửa sổ ngữ cảnh, lưu trữ trạng thái và thực thi ranh giới an toàn quyết định liệu agent có hiệu quả hay dễ vỡ.
+Sebastian Raschka có một bài viết rất hay về [Components of a Coding Agent](https://magazine.sebastianraschka.com/p/components-of-a-coding-agent) — ý chính là: agent không chỉ là LLM, mà là cả một hệ thống gồm vòng lặp lập kế hoạch, thực thi công cụ, bộ nhớ, và lớp điều phối bao ngoài. IDE chính là lớp điều phối đó. Nó quản lý context window như thế nào, lưu trạng thái ra sao, và kiểm soát agent đến đâu — đây mới là thứ quyết định agent chạy tốt hay liên tục sai.
 
-Bài thuyết trình này áp dụng cách tiếp cận đó vào việc đánh giá. Thay vì so sánh các tính năng riêng lẻ, nó tổ chức các khả năng IDE xung quanh các tiêu chí đánh giá có thể giúp làm nổi bật chất lượng khai thác. Các tiêu chí được đề cập được nhóm thành một số chiều kích — một điểm khởi đầu để đánh giá có cấu trúc, không phải một tiêu chuẩn cố định.
+Bài thuyết trình này dùng góc nhìn đó để xây dựng một bộ tiêu chí đánh giá. Thay vì liệt kê tính năng, mình nhóm các khả năng của IDE thành bốn nhóm có thể đánh giá được — một điểm khởi đầu, không phải chuẩn mực cuối cùng.
 
-## Tiêu Chí Đánh Giá
+## Tiêu chí đánh giá
 
-| Nhóm | Chiều Kích | Câu hỏi cốt lõi |
+| Nhóm | Tiêu chí | Câu hỏi chính |
 | --- | --- | --- |
-| A | Phiên & Ngữ Cảnh | Nó biết gì, và trong bao lâu? |
-| B | Kiểm Soát & Tùy Chỉnh | Ai điều khiển vòng lặp agent? |
-| C | An Toàn & Quan Sát | Bạn có thể tin tưởng và theo dõi những gì nó đã làm không? |
-| D | Khả Năng Mở Rộng | Phạm vi khai thác đạt đến đâu? |
+| A | Session & Context | Nó biết gì, và nhớ được bao lâu? |
+| B | Control & Customization | Ai thực sự điều khiển agent? |
+| C | Safety & Observability | Có thể tin tưởng và kiểm tra lại được không? |
+| D | Extended Capabilities | Agent có thể với tay đến đâu? |
 
-Mỗi chiều kích làm nổi bật một cân nhắc khác nhau; danh sách có thể mở rộng khi các công cụ và mẫu xung quanh coding agent tiếp tục trưởng thành.
+Mỗi nhóm khai thác một khía cạnh khác nhau. Danh sách này sẽ còn thay đổi khi tooling và các pattern xung quanh coding agent tiếp tục phát triển.
 
-## Dựng
+## Build
 
-Bài thuyết trình được dựng từ `slides/presentation.md` sử dụng [markpress](https://github.com/kroitor/markpress).
+Bài thuyết trình được build từ `slides/presentation.md` dùng [markpress](https://github.com/kroitor/markpress).
 
 ```sh
 npm install
