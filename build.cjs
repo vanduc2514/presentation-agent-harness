@@ -11,7 +11,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const markpress = require('./node_modules/markpress');
+const markpress = require('markpress');
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 const ROOT      = __dirname;

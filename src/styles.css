@@ -572,6 +572,44 @@ body {
     font-size: 1.2rem;
   }
 
+  .summary,
+  .note {
+    font-size: 1.1rem;
+    margin-top: 10px;
+  }
+
+  .takeaway {
+    font-size: 1.2rem;
+  }
+
+  .bullet-list,
+  .numbered-list {
+    gap: 10px;
+    margin-top: 20px;
+  }
+
+  .bullet-item,
+  .numbered-item {
+    font-size: 1.1rem;
+    padding: 12px 14px;
+    gap: 10px;
+  }
+
+  .info-card h3,
+  .stack-card .stack-label,
+  .column-card h3,
+  .nav-card strong {
+    font-size: 1.2rem;
+  }
+
+  .info-card p,
+  .stack-card p,
+  .column-card li,
+  .timeline-step p,
+  .nav-card span {
+    font-size: 1.1rem;
+  }
+
   .grid-panel,
   .nav-grid,
   .dual-columns,
@@ -581,6 +619,39 @@ body {
 }
 
 @media (max-width: 700px) {
+  .step-shell {
+    min-height: 0;
+    padding: 24px 20px;
+  }
+
+  .slide-title {
+    font-size: 2rem;
+  }
+
+  .lead {
+    font-size: 0.95rem;
+    margin-top: 12px;
+  }
+
+  .summary,
+  .note {
+    font-size: 0.9rem;
+    margin-top: 8px;
+  }
+
+  .bullet-list,
+  .numbered-list {
+    gap: 8px;
+    margin-top: 14px;
+  }
+
+  .bullet-item,
+  .numbered-item {
+    font-size: 0.95rem;
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
   .step-split-layout {
     grid-template-columns: 1fr;
     height: auto;
