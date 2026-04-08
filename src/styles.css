@@ -674,6 +674,16 @@ body {
   .timeline {
     grid-template-columns: 1fr;
   }
+
+  .step-split-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .hero-image-card,
+  .step-split-layout > figure {
+    display: none;
+  }
 }
 
 @media (max-width: 900px) {
