@@ -57,6 +57,8 @@ eyebrow: Architecture Shift
 
 The model reasons, but the harness controls context, tools, state, and memory.
 
+![Car Engine](https://images.unsplash.com/photo-1764769488195-2abc51a556ee?q=80&w=800&auto=format&fit=crop)
+
 | Layer | Role |
 | --- | --- |
 | IDE / Harness Engine | Shapes prompts, manages tools, memory, session state, and safety boundaries. |
@@ -76,20 +78,20 @@ eyebrow: Evaluation Lens
 ---
 # The Quality of Harness
 
-Rather than chase isolated features, evaluate the system through four coherent dimensions.
+Evaluate the system through coherent dimensions.
 
 ![Cockpit control panel](https://images.unsplash.com/photo-1768554591368-292194a9f50c?w=1200&q=80&auto=format&fit=crop)
 
 | Code | Label | Prompt | Target |
 | --- | --- | --- | --- |
-| A | Context & Memory | What does it know? | context-memory |
+| A | Session & Context | What does it know? | session-context |
 | B | Control & Customization | Who is in charge? | control-customization |
 | C | Safety & Observability | Can you trust it? | safety-observability |
 | D | Extended Capabilities | What else can it do? | extended-capabilities |
 
 <!-- slide -->
 ---
-id: context-memory
+id: session-context
 classes: step step-card theme-a
 layout: grid
 position:
@@ -99,9 +101,11 @@ position:
   scale: 1.0
 eyebrow: Group A
 ---
-# Context & Memory
+# Session & Context
 
 If context quality collapses, the agent hallucinates, repeats mistakes, and loses continuity.
+
+![Session and context window diagram](/public/diagrams/chat-session-reference.png)
 
 | Capability | Why it matters |
 | --- | --- |
@@ -126,19 +130,49 @@ eyebrow: Group B
 
 Autonomy without runtime control is risk. Customization turns the agent from generic to team-native.
 
-## Runtime Sovereignty
+## [Runtime Sovereignty](#runtime-sovereignty-example)
 
 - Pause and steer mid-task without losing state.
 - Branch or restore sessions at meaningful checkpoints.
 - Dispatch work through a predictable task queue.
 - Spawn sub-agents with visibility and merge control.
 
-## Teaching the Agent
+## [Teaching the Agent](#teaching-agent-example)
 
 - Encode constraints and conventions at project or org scope.
 - Drive consistency across sessions with repeatable protocols.
 - Hook agents into saves, test failures, CI, or PR events.
 - Swap models by task, budget, or local endpoint.
+
+<!-- slide -->
+---
+id: runtime-sovereignty-example
+classes: step step-card theme-b
+position:
+  x: 16800
+  y: 0
+  rotate: 4
+  scale: 1.0
+eyebrow: Group B · Runtime Sovereignty
+---
+# Runtime Sovereignty Example
+
+A hands-on walk-through of pausing, branching, and steering agents mid-task.
+
+<!-- slide -->
+---
+id: teaching-agent-example
+classes: step step-card theme-b
+position:
+  x: 19100
+  y: -1200
+  rotate: -5
+  scale: 1.0
+eyebrow: Group B · Teaching the Agent
+---
+# Teaching the Agent Example
+
+A hands-on walk-through of encoding constraints, hooks, and model routing.
 
 <!-- slide -->
 ---
@@ -198,9 +232,9 @@ position:
   y: 5800
   rotate: -8
   scale: 1.0
-eyebrow: Benchmark Method
+eyebrow: Evaluation Method
 ---
-# Run a Real Self-Benchmark
+# Run a Self-Benchmark
 
 There is no substitute for two honest hours in your own codebase with your own constraints.
 
@@ -222,7 +256,7 @@ position:
   y: 5800
   rotate: 5
   scale: 1.8
-eyebrow: End State
+eyebrow: Closing
 ---
 # Intent to Outcome Is the Metric
 
