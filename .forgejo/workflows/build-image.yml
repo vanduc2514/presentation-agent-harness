@@ -11,19 +11,22 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Log in to container registry
-        uses: docker/login-action@v3
+      - name: Setup node
+        uses: actions/setup-node
         with:
-          registry: git.nvduc.lab
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+          node-version: 20
 
-      - name: Build and push image
+      - name: Run npm install
+        run: npm ci --no-audit
+
+      - name: Run npm build
+        run: npm run build
+
+      - name: Build image
         uses: docker/build-push-action@v6
         with:
           context: .
-          push: true
+          push: false
           tags: |
-            git.nvduc.lab/${{ github.repository }}:${{ github.sha }}
-            git.nvduc.lab/${{ github.repository }}:${{ github.ref_name }}
-            git.nvduc.lab/${{ github.repository }}:latest
+            ${{ github.repository_owner }}/resume:${{ github.sha }}
+            ${{ github.repository_owner }}/resume:${{ github.ref_name }}

@@ -1,18 +1,8 @@
-FROM node:20-alpine AS builder
+FROM busybox:1.35
 
-WORKDIR /app
-
-COPY package.json package-lock.json ./
-RUN npm ci --no-audit
-
-COPY . .
-RUN npm run build
-
-
-FROM nginx:1.27-alpine
-
-COPY --from=builder /app/dist /usr/share/nginx/html
+COPY dist /www
 
 EXPOSE 80
 
-CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT [ "busybox", "httpd" ]
+CMD ["-f", "-v", "-p", "80", "-h", "/www"]
