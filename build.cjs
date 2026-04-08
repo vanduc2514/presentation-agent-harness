@@ -16,7 +16,7 @@ const markpress = require('./node_modules/markpress');
 // ── Paths ─────────────────────────────────────────────────────────────────────
 const ROOT      = __dirname;
 const MD_INPUT  = path.join(ROOT, 'slides', 'presentation.md');
-const CSS_INPUT = path.join(ROOT, 'src',    'styles.css');
+const CSS_INPUT = path.join(ROOT, 'styles.css');
 const OUTPUT_DIR = path.join(ROOT, 'output');
 const HTML_OUT  = path.join(OUTPUT_DIR, 'index.html');
 const DIAGRAM_SRC = path.join(ROOT, 'public', 'diagrams');
