@@ -301,46 +301,50 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
   document.body.appendChild(nav);
 
   // ── Viewport scaling ───────────────────────────────────────────────────────
-  // impress.js hardcodes windowScale=1, so we apply CSS transform to #impress
-  // to center and scale the 1600×900 canvas to fit the viewport.
+  // impress.js hardcodes windowScale=1 and manages #impress positioning itself
+  // (top:50%, left:50%, transform: perspective+scale on every step transition).
+  // We wrap #impress in a fixed #impress-scaler div and scale/position the
+  // wrapper instead, so impress.js can freely mutate #impress without conflict.
   // Only applied for viewport ≥ 768px; smaller viewports use CSS media queries.
   var PRES_W = 1600, PRES_H = 900;
+  var scalerEl = null;
+  if (impressEl) {
+    scalerEl = document.createElement('div');
+    scalerEl.id = 'impress-scaler';
+    impressEl.parentNode.insertBefore(scalerEl, impressEl);
+    scalerEl.appendChild(impressEl);
+  }
+
   function scalePres() {
-    if (!impressEl) return;
+    if (!scalerEl) return;
     var vw = window.innerWidth;
     var vh = window.innerHeight;
     if (vw < 768) {
-      impressEl.style.position = '';
-      impressEl.style.top = '';
-      impressEl.style.left = '';
-      impressEl.style.width = '';
-      impressEl.style.height = '';
-      impressEl.style.transformOrigin = '';
-      impressEl.style.transform = '';
+      scalerEl.style.position = '';
+      scalerEl.style.top = '';
+      scalerEl.style.left = '';
+      scalerEl.style.width = '';
+      scalerEl.style.height = '';
+      scalerEl.style.overflow = '';
+      scalerEl.style.transform = '';
       return;
     }
     var s = Math.min(vw / PRES_W, vh / PRES_H, 1);
     var tx = (vw - PRES_W * s) / 2;
     var ty = (vh - PRES_H * s) / 2;
-    impressEl.style.position = 'fixed';
-    impressEl.style.top = '0';
-    impressEl.style.left = '0';
-    impressEl.style.width = PRES_W + 'px';
-    impressEl.style.height = PRES_H + 'px';
-    impressEl.style.transformOrigin = 'top left';
-    impressEl.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+    scalerEl.style.position = 'fixed';
+    scalerEl.style.top = '0';
+    scalerEl.style.left = '0';
+    scalerEl.style.width = PRES_W + 'px';
+    scalerEl.style.height = PRES_H + 'px';
+    scalerEl.style.overflow = 'hidden';
+    scalerEl.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
   }
+  scalePres();
 
   // ── Init impress ───────────────────────────────────────────────────────────
   var api = window.impress();
   api.init();
-
-  // Re-apply scaling after impress.js init overwrites #impress transform
-  if (window.requestAnimationFrame) {
-    window.requestAnimationFrame(scalePres);
-  } else {
-    scalePres();
-  }
 
   window.addEventListener('resize', scalePres);
 

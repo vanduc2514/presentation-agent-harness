@@ -59,9 +59,12 @@ body {
   display: block;
 }
 
+#impress-scaler {
+  transform-origin: top left;
+}
+
 #impress {
   position: absolute;
-  inset: 0;
 }
 
 .step {
