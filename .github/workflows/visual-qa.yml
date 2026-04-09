@@ -1,0 +1,108 @@
+name: Visual QA
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Build presentation
+        run: npm run build:markpress
+
+      - name: Install Playwright Chromium browser
+        run: npx playwright install chromium --with-deps
+
+      - name: Run Visual QA (capture screenshots)
+        run: node scripts/visual-qa.cjs
+
+      - name: Upload screenshots as artifact
+        id: upload-artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-qa-screenshots
+          path: screenshots/
+          if-no-files-found: error
+
+      - name: Post Visual QA summary to PR
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+
+            const viewports = [
+              { name: 'desktop-1920x1080', label: 'Desktop (1920×1080)' },
+              { name: 'laptop-1440x900',   label: 'Laptop  (1440×900)'  },
+              { name: 'laptop-1280x800',   label: 'Laptop  (1280×800)'  },
+              { name: 'tablet-768x1024',   label: 'Tablet  (768×1024)'  },
+              { name: 'mobile-390x844',    label: 'Mobile  (390×844)'   },
+            ];
+            const slidesPerViewport = 3;
+            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const artifactUrl = `${runUrl}`;
+
+            const rows = viewports.map(vp => {
+              const slideList = Array.from({ length: slidesPerViewport }, (_, i) =>
+                `Slide ${i + 1}`
+              ).join(', ');
+              return `| ${vp.label} | ${slidesPerViewport} | ${slideList} |`;
+            }).join('\n');
+
+            const body = [
+              '## 📸 Visual QA — Screenshots',
+              '',
+              `Screenshots captured at **${viewports.length} viewport sizes** × **${slidesPerViewport} slides** = **${viewports.length * slidesPerViewport} total screenshots**.`,
+              '',
+              '| Viewport | Slides captured | Slides |',
+              '|---|---|---|',
+              rows,
+              '',
+              `> [Download all screenshots from the workflow artifacts](${artifactUrl})`,
+            ].join('\n');
+
+            // Create or update a sticky comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+            });
+
+            const marker = '## 📸 Visual QA — Screenshots';
+            const existing = comments.find(c =>
+              c.user.login === 'github-actions[bot]' && c.body.startsWith(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                comment_id: existing.id,
+                body,
+              });
+              console.log('Updated existing Visual QA comment.');
+            } else {
+              await github.rest.issues.createComment({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: context.issue.number,
+                body,
+              });
+              console.log('Created new Visual QA comment.');
+            }
