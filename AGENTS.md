@@ -32,4 +32,5 @@ Always follow these steps when changing the presentation:
 1. Plan
 2. Make the change
 3. Render into HTML page
-4. Verify with visual QA for every slides in the presentation
+4. Verify with visual QA by using browser to verify for every slides in the presentation after you make the change for multiple screens
+5. (Optional) If you implement in Cloud environment or have to comment in a Pull Request (PR) then you must include 3-5 screenshot of the slides for all screen in the comment / PR body.
