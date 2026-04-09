@@ -76,7 +76,7 @@ Evaluate the system through coherent dimensions.
 
 If context quality collapses, the agent hallucinates, repeats mistakes, and loses continuity.
 
-![Session and context window diagram](public/diagrams/chat-session-reference.png)
+![Session and context window diagram](images/chat-session-reference.png)
 
 | Capability | Why it matters |
 | --- | --- |

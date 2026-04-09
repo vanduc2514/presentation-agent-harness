@@ -19,8 +19,8 @@ const MD_INPUT  = path.join(ROOT, 'slides', 'presentation.md');
 const CSS_INPUT = path.join(ROOT, 'styles.css');
 const OUTPUT_DIR = path.join(ROOT, 'output');
 const HTML_OUT  = path.join(OUTPUT_DIR, 'index.html');
-const DIAGRAM_SRC = path.join(ROOT, 'public', 'diagrams');
-const DIAGRAM_DST = path.join(OUTPUT_DIR, 'diagrams');
+const IMAGES_SRC = path.join(ROOT, 'slides', 'images');
+const IMAGES_DST = path.join(OUTPUT_DIR, 'images');
 
 // ── Grid icons (replicated from src/render.js) ────────────────────────────────
 const GRID_ICONS = {
@@ -450,10 +450,10 @@ markpress(markdownSrc, markpressOptions)
     if (!fs.existsSync(OUTPUT_DIR)) fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
     // Copy diagrams folder to output so local image paths work
-    if (fs.existsSync(DIAGRAM_SRC)) {
-      if (!fs.existsSync(DIAGRAM_DST)) fs.mkdirSync(DIAGRAM_DST, { recursive: true });
-      fs.readdirSync(DIAGRAM_SRC).forEach(function (file) {
-        fs.copyFileSync(path.join(DIAGRAM_SRC, file), path.join(DIAGRAM_DST, file));
+    if (fs.existsSync(IMAGES_SRC)) {
+      if (!fs.existsSync(IMAGES_DST)) fs.mkdirSync(IMAGES_DST, { recursive: true });
+      fs.readdirSync(IMAGES_SRC).forEach(function (file) {
+        fs.copyFileSync(path.join(IMAGES_SRC, file), path.join(IMAGES_DST, file));
       });
       console.log('Diagrams copied to output/diagrams/');
     }
