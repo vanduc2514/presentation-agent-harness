@@ -1,10 +1,10 @@
 # Evaluating IDEs for the AI Agent Era
 
+[![vi](https://img.shields.io/badge/lang-vi-yellow.svg)](https://github.com/vanduc2514/presentation-agent-harness/blob/master/README.vi-VN.md)
+
 A non-linear presentation on how to assess modern IDEs as agent harnesses rather than just code editors. The slides walk through the fundamentals that still define a capable IDE, how the architecture shifts when an AI agent is in the loop, and a structured framework for evaluating harness quality across four dimensions.
 
 Live at [slides.nvduc.dev](https://slides.nvduc.dev).
-
-*Đọc bằng tiếng Việt: [README.vi-VN.md](./README.vi-VN.md)*
 
 ## Background
 
