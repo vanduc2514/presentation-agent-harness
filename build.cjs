@@ -323,7 +323,7 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
   downloadLink.href = './${pdfFilename}';
   downloadLink.download = '${pdfFilename}';
   downloadLink.title = 'Download presentation as PDF';
-  downloadLink.setAttribute('aria-label', 'Download presentation as PDF');
+  downloadLink.setAttribute('aria-label', 'Download PDF');
   downloadLink.innerHTML = '${SVG_DOWNLOAD}';
   document.body.appendChild(downloadLink);
 

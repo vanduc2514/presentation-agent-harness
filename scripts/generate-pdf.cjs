@@ -26,7 +26,7 @@ const NAV_TIMEOUT  = 10_000;
 
 const PDF_FILENAME = process.argv[2];
 if (!PDF_FILENAME) {
-  console.error('ERROR: PDF filename argument is required (e.g. presentation-agent-harness-abc1234.pdf)');
+  console.error('ERROR: PDF filename argument is required (e.g. presentation-agent-harness-a1b2c3d.pdf)');
   process.exit(1);
 }
 const PDF_OUT = path.join(OUTPUT_DIR, PDF_FILENAME);
