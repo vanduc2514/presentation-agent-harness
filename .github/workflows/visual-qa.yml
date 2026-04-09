@@ -3,12 +3,13 @@ name: Visual QA
 on:
   pull_request:
     branches: [main]
+  push:
+    branches: [copilot/**]
   workflow_dispatch:
 
 jobs:
   visual-qa:
     runs-on: ubuntu-latest
-    if: github.event_name == 'workflow_dispatch' || startsWith(github.head_ref, 'presentation/')
     permissions:
       pull-requests: write
 
