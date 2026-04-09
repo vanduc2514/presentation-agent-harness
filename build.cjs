@@ -363,7 +363,19 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
   var api = window.impress();
   api.init();
 
-  window.addEventListener('resize', scalePres);
+  // impress.js sets "overflow: hidden; height: 100%" as inline styles on <body>
+  // during init, which overrides the mobile-layout CSS media query that needs
+  // overflow-y: auto for slide content to be scrollable.  Strip those inline
+  // styles on mobile and re-check on every resize.
+  function fixBodyOverflow() {
+    if (window.innerWidth < 768) {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+    }
+  }
+  fixBodyOverflow();
+
+  window.addEventListener('resize', function () { scalePres(); fixBodyOverflow(); });
 
   document.getElementById('nav-home').addEventListener('click', function () {
     api.goto(steps[0]);
@@ -425,8 +437,6 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
     // Only treat as a navigation swipe if horizontal motion dominates and
     // exceeds a minimum threshold.
     if (Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy)) {
-      if (dx > 0) api.prev(); // swipe right → go back
-      else        api.next(); // swipe left  → go forward
       e.preventDefault();
       e.stopImmediatePropagation();
     }
