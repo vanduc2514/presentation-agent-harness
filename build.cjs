@@ -370,6 +370,56 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     event.preventDefault();
     api.goto(target.dataset.goto);
   });
+
+  // ── Disable click-to-advance on slide background ──────────────────────────
+  // impress.js has a built-in handler that advances to whichever .step the user
+  // clicks on (if it is not the active step).  On mobile the tap is meant for
+  // scroll / swiping, so we block that handler via capture-phase interception.
+  document.addEventListener('click', function (e) {
+    var node = e.target;
+    while (node && node !== document.documentElement) {
+      // let real interactive elements through
+      if (node.tagName === 'BUTTON' || node.tagName === 'A') return;
+      if (node.dataset && node.dataset.goto) return;
+      if (node.classList && node.classList.contains('step')) {
+        e.stopImmediatePropagation();
+        return;
+      }
+      node = node.parentNode;
+    }
+  }, true); // capture phase — runs before impress.js bubble-phase handlers
+
+  // ── Swipe left/right to navigate, up/down to scroll ──────────────────────
+  // impress.js registers a touchstart listener (bubble phase) that navigates
+  // when the user taps the left/right 30 % of the screen.  We supersede it by
+  // registering our own capture-phase touchstart that records the start
+  // position and stops propagation so impress.js never sees the event.  On
+  // touchend we decide the intent: horizontal swipe → navigate; vertical → let
+  // the browser handle scroll normally.
+  var _sx = 0, _sy = 0;
+
+  document.addEventListener('touchstart', function (e) {
+    if (e.touches.length === 1) {
+      _sx = e.touches[0].clientX;
+      _sy = e.touches[0].clientY;
+      e.stopImmediatePropagation(); // block impress.js touchstart handler
+    }
+  }, { passive: true, capture: true });
+
+  document.addEventListener('touchend', function (e) {
+    if (!e.changedTouches.length) return;
+    var dx = e.changedTouches[0].clientX - _sx;
+    var dy = e.changedTouches[0].clientY - _sy;
+    // Only treat as a navigation swipe if horizontal motion dominates and
+    // exceeds a minimum threshold.
+    if (Math.abs(dx) >= 50 && Math.abs(dx) > Math.abs(dy)) {
+      if (dx > 0) api.prev(); // swipe right → go back
+      else        api.next(); // swipe left  → go forward
+      e.preventDefault();
+      e.stopImmediatePropagation();
+    }
+    // Vertical swipes fall through to normal document scroll.
+  }, { passive: false, capture: true });
 })();
 `
   // Interpolate the SVG strings (template literals in the JS source above use ${} so we

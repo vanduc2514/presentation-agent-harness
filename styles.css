@@ -665,3 +665,106 @@ body {
     min-height: 240px;
   }
 }
+
+/* ── Mobile: document-flow layout override (≤ 767px) ──────────────────────── */
+/* Replaces impress.js 3D canvas with a normal scrollable document so that     */
+/* swipe-up/down scrolls content and swipe-left/right changes slides.          */
+@media (max-width: 767px) {
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 16px 16px 80px;
+  }
+
+  .presentation-shell {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    min-height: 0;
+  }
+
+  #impress-scaler {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    height: auto !important;
+    margin-top: auto;
+    margin-bottom: auto;
+  }
+
+  #impress {
+    position: static !important;
+    transform: none !important;
+    top: auto !important;
+    left: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+  }
+
+  /* impress.js wraps all steps in a single canvas div — make it static */
+  #impress > div {
+    position: static !important;
+    transform: none !important;
+    transform-style: flat !important;
+    transition: none !important;
+    display: block !important;
+  }
+
+  .step {
+    position: static !important;
+    transform: none !important;
+    width: 100% !important;
+    margin: 0 !important;
+    opacity: 0 !important;
+    display: none !important;
+    pointer-events: none !important;
+    transition: none !important;
+    contain: none !important;
+  }
+
+  .step.past,
+  .step.future {
+    opacity: 0 !important;
+    display: none !important;
+  }
+
+  .step.present {
+    display: block !important;
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .step-shell,
+  .step-content-card {
+    min-height: 0;
+    overflow: visible;
+  }
+
+  /* hide the left accent stripe — the card border already shows the theme color */
+  .step-shell::after {
+    display: none;
+  }
+
+  .step-split-layout {
+    grid-template-columns: 1fr;
+    height: auto;
+    gap: 16px;
+  }
+
+  .hero-image-card {
+    min-height: 220px;
+  }
+
+  /* Nav bar sits in the body flex flow but stays fixed at bottom */
+  .slide-nav {
+    position: fixed;
+    bottom: 10px;
+  }
+}
