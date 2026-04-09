@@ -23,7 +23,7 @@ const PORT         = 4173;
 const BASE_URL     = `http://localhost:${PORT}`;
 const OUTPUT_DIR   = path.join(__dirname, '..', 'output');
 const SCREENSHOT_DIR = path.join(__dirname, '..', 'qa-screenshots');
-const SLIDES_TO_CAPTURE = 3;   // number of slides to capture per viewport
+const SLIDES_TO_CAPTURE = 15;  // number of slides to capture per viewport
 const NAV_TIMEOUT  = 10_000;   // ms to wait for slide transitions
 
 const VIEWPORTS = [
