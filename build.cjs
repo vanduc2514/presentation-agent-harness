@@ -307,6 +307,9 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
   // wrapper instead, so impress.js can freely mutate #impress without conflict.
   // Only applied for viewport ≥ 768px; smaller viewports use CSS media queries.
   var PRES_W = 1600, PRES_H = 900;
+  // Minimum padding (px) kept around the scaled slide on each side.
+  // Without this, a 1440px-wide viewport produces scale=0.9 → tx=0 (no side margin).
+  var SLIDE_PADDING = 48;
   var scalerEl = null;
   if (impressEl) {
     scalerEl = document.createElement('div');
@@ -329,7 +332,7 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
       scalerEl.style.transform = '';
       return;
     }
-    var s = Math.min(vw / PRES_W, vh / PRES_H, 1);
+    var s = Math.min((vw - SLIDE_PADDING * 2) / PRES_W, (vh - SLIDE_PADDING * 2) / PRES_H, 1);
     var tx = (vw - PRES_W * s) / 2;
     var ty = (vh - PRES_H * s) / 2;
     scalerEl.style.position = 'fixed';
