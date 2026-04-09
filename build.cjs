@@ -373,19 +373,43 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     api.goto(target.dataset.goto);
   });
 
+  // ── Reset scroll position whenever a slide becomes active ─────────────────
+  document.addEventListener('impress:stepenter', function (e) {
+    var scrollable = e.target.querySelector('.step-shell, .step-content-card');
+    if (scrollable) scrollable.scrollTop = 0;
+  });
+
   // ── Swipe left / right to navigate slides ─────────────────────────────────
   var swipeTouchStartX = 0;
   var swipeTouchStartY = 0;
+  var swipeTouchId = null;
   var SWIPE_THRESHOLD = 50;
 
   document.addEventListener('touchstart', function (e) {
+    // Ignore multi-touch gestures (pinch/zoom)
+    if (e.touches.length !== 1) { swipeTouchId = null; return; }
+    swipeTouchId = e.touches[0].identifier;
     swipeTouchStartX = e.touches[0].clientX;
     swipeTouchStartY = e.touches[0].clientY;
   }, { passive: true });
 
+  document.addEventListener('touchcancel', function () {
+    swipeTouchId = null;
+  }, { passive: true });
+
   document.addEventListener('touchend', function (e) {
-    var dx = e.changedTouches[0].clientX - swipeTouchStartX;
-    var dy = e.changedTouches[0].clientY - swipeTouchStartY;
+    if (swipeTouchId === null) return;
+    var touch = null;
+    for (var i = 0; i < e.changedTouches.length; i++) {
+      if (e.changedTouches[i].identifier === swipeTouchId) {
+        touch = e.changedTouches[i];
+        break;
+      }
+    }
+    swipeTouchId = null;
+    if (!touch) return;
+    var dx = touch.clientX - swipeTouchStartX;
+    var dy = touch.clientY - swipeTouchStartY;
     // Only fire for predominantly horizontal swipes above the threshold
     if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy) * 1.5) return;
     if (dx < 0) {
