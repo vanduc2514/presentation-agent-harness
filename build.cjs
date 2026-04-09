@@ -372,6 +372,28 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     event.preventDefault();
     api.goto(target.dataset.goto);
   });
+
+  // ── Swipe left / right to navigate slides ─────────────────────────────────
+  var swipeTouchStartX = 0;
+  var swipeTouchStartY = 0;
+  var SWIPE_THRESHOLD = 50;
+
+  document.addEventListener('touchstart', function (e) {
+    swipeTouchStartX = e.touches[0].clientX;
+    swipeTouchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', function (e) {
+    var dx = e.changedTouches[0].clientX - swipeTouchStartX;
+    var dy = e.changedTouches[0].clientY - swipeTouchStartY;
+    // Only fire for predominantly horizontal swipes above the threshold
+    if (Math.abs(dx) < SWIPE_THRESHOLD || Math.abs(dx) < Math.abs(dy) * 1.5) return;
+    if (dx < 0) {
+      api.next();
+    } else {
+      api.prev();
+    }
+  }, { passive: true });
 })();
 `
   // Interpolate the SVG strings (template literals in the JS source above use ${} so we

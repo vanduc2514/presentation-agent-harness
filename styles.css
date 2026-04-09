@@ -91,7 +91,8 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   min-height: 900px;
-  overflow: hidden;
+  max-height: 900px;
+  overflow-y: auto;
 }
 
 .present .step-shell {
@@ -487,7 +488,7 @@ body {
 
 .step-content-card {
   min-width: 0;
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
@@ -624,6 +625,7 @@ body {
 @media (max-width: 700px) {
   .step-shell {
     min-height: 0;
+    max-height: none;
     padding: 24px 20px;
   }
 
