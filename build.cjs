@@ -9,8 +9,9 @@
  * Promise API.
  */
 
-const fs   = require('fs');
-const path = require('path');
+const fs             = require('fs');
+const path           = require('path');
+const { execFileSync, execSync } = require('child_process');
 const markpress = require('markpress');
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
@@ -22,6 +23,10 @@ const HTML_OUT  = path.join(OUTPUT_DIR, 'index.html');
 const IMAGES_SRC = path.join(ROOT, 'slides', 'images');
 const IMAGES_DST = path.join(OUTPUT_DIR, 'images');
 const GITHUB_REPO_URL = 'https://github.com/vanduc2514/presentation-agent-harness';
+
+// ── PDF filename (includes short commit hash for cache-busting) ───────────────
+const GIT_HASH    = execSync('git rev-parse --short=7 HEAD', { cwd: ROOT }).toString().trim();
+const PDF_FILENAME = `presentation-agent-harness-${GIT_HASH}.pdf`;
 
 // ── Grid icons (replicated from src/render.js) ────────────────────────────────
 const GRID_ICONS = {
@@ -36,9 +41,10 @@ const SVG_HOME = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
 const SVG_PREV = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
 const SVG_NEXT = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
 const SVG_GITHUB = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297C5.373.297 0 5.67 0 12.297c0 5.302 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.608-4.042-1.608-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 1.204.085 1.838 1.237 1.838 1.237 1.07 1.835 2.807 1.305 3.492.998.107-.775.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.93 0-1.31.469-2.382 1.236-3.221-.124-.303-.536-1.523.118-3.176 0 0 1.008-.322 3.3 1.23a11.5 11.5 0 0 1 3-.404c1.02.005 2.047.138 3 .404 2.29-1.552 3.297-1.23 3.297-1.23.654 1.653.243 2.873.118 3.176.77.839 1.235 1.911 1.235 3.221 0 4.602-2.805 5.625-5.475 5.922.43.372.815 1.103.815 2.222 0 1.606-.015 2.896-.015 3.289 0 .322.216.694.825.576C20.565 22.097 24 17.599 24 12.297 24 5.67 18.627.297 12 .297z"/></svg>';
+const SVG_DOWNLOAD = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>';
 
 // ── Build the browser-side transformation + init script ───────────────────────
-function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svgNext, svgGithub) {
+function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svgNext, svgGithub, pdfFilename) {
   return `
 (function () {
   'use strict';
@@ -312,6 +318,15 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
   repoLink.innerHTML = '${svgGithub}';
   document.body.appendChild(repoLink);
 
+  var downloadLink = document.createElement('a');
+  downloadLink.className = 'slide-download-link';
+  downloadLink.href = './${pdfFilename}';
+  downloadLink.download = '${pdfFilename}';
+  downloadLink.title = 'Download presentation as PDF';
+  downloadLink.setAttribute('aria-label', 'Download presentation as PDF');
+  downloadLink.innerHTML = '${SVG_DOWNLOAD}';
+  document.body.appendChild(downloadLink);
+
   // ── Viewport scaling ───────────────────────────────────────────────────────
   // impress.js hardcodes windowScale=1 and manages #impress positioning itself
   // (top:50%, left:50%, transform: perspective+scale on every step transition).
@@ -513,7 +528,8 @@ markpress(markdownSrc, markpressOptions)
       SVG_HOME,
       SVG_PREV,
       SVG_NEXT,
-      SVG_GITHUB
+      SVG_GITHUB,
+      PDF_FILENAME
     );
     html = html.replace(
       '<script>impress().init();</script>',
@@ -534,6 +550,14 @@ markpress(markdownSrc, markpressOptions)
 
     fs.writeFileSync(HTML_OUT, html, 'utf8');
     console.log('Build complete:', HTML_OUT);
+
+    // 7. Generate PDF (requires Playwright Chromium to be installed)
+    console.log(`Generating PDF: ${PDF_FILENAME}…`);
+    execFileSync('node', [path.join(ROOT, 'scripts', 'generate-pdf.cjs'), PDF_FILENAME], {
+      stdio: 'inherit',
+      cwd: ROOT,
+    });
+    console.log('PDF build complete.');
   })
   .catch(function (err) {
     console.error('Build failed:', err);

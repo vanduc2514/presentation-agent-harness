@@ -23,6 +23,9 @@ jobs:
       - name: Run npm install
         run: npm ci --no-audit
 
+      - name: Install Playwright Chromium browser
+        run: npx playwright install chromium --with-deps
+
       - name: Run npm build
         run: npm run build:markpress
 
