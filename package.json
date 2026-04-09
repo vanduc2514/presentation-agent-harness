@@ -7,7 +7,9 @@
     "build:markpress": "node build.cjs",
     "preview:markpress": "npx serve output -l 4173"
   },
-  "dependencies": {},
+  "dependencies": {
+    "sharp": "^0.34.5"
+  },
   "devDependencies": {
     "markpress": "^4.0.0",
     "playwright": "^1.59.1"
