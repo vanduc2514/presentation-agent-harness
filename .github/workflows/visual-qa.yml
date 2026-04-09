@@ -8,12 +8,15 @@ jobs:
   visual-qa:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       pull-requests: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -32,20 +35,38 @@ jobs:
       - name: Run Visual QA (capture screenshots)
         run: node scripts/visual-qa.cjs
 
+      - name: Commit screenshots to branch
+        id: commit-screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add qa-screenshots/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: update visual QA screenshots [skip ci]"
+            git push origin HEAD:${{ github.head_ref }}
+            echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Upload screenshots as artifact
-        id: upload-artifact
         uses: actions/upload-artifact@v4
         with:
           name: visual-qa-screenshots
-          path: screenshots/
+          path: qa-screenshots/
           if-no-files-found: error
 
-      - name: Post Visual QA summary to PR
+      - name: Post Visual QA screenshots to PR
         uses: actions/github-script@v7
+        env:
+          SCREENSHOTS_SHA: ${{ steps.commit-screenshots.outputs.sha }}
         with:
           script: |
-            const fs = require('fs');
-            const path = require('path');
+            const sha    = process.env.SCREENSHOTS_SHA;
+            const owner  = context.repo.owner;
+            const repo   = context.repo.repo;
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
 
             const viewports = [
               { name: 'desktop-1920x1080', label: 'Desktop (1920×1080)' },
@@ -54,33 +75,34 @@ jobs:
               { name: 'tablet-768x1024',   label: 'Tablet  (768×1024)'  },
               { name: 'mobile-390x844',    label: 'Mobile  (390×844)'   },
             ];
-            const slidesPerViewport = 3;
-            const runUrl = `https://github.com/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
-            const artifactUrl = `${runUrl}`;
+            const SLIDES = 3;
 
-            const rows = viewports.map(vp => {
-              const slideList = Array.from({ length: slidesPerViewport }, (_, i) =>
-                `Slide ${i + 1}`
-              ).join(', ');
-              return `| ${vp.label} | ${slidesPerViewport} | ${slideList} |`;
-            }).join('\n');
+            // Build one collapsible section per viewport, each containing
+            // a row of slide screenshots embedded as inline images.
+            const sections = viewports.map(vp => {
+              const images = Array.from({ length: SLIDES }, (_, i) => {
+                const file = `${vp.name}_slide-${String(i + 1).padStart(2, '0')}.png`;
+                const url  = `https://raw.githubusercontent.com/${owner}/${repo}/${sha}/qa-screenshots/${file}`;
+                return `**Slide ${i + 1}**\n![${vp.label} – slide ${i + 1}](${url})`;
+              }).join('\n\n');
+
+              return `<details>\n<summary>${vp.label}</summary>\n\n${images}\n\n</details>`;
+            }).join('\n\n');
 
             const body = [
               '## 📸 Visual QA — Screenshots',
               '',
-              `Screenshots captured at **${viewports.length} viewport sizes** × **${slidesPerViewport} slides** = **${viewports.length * slidesPerViewport} total screenshots**.`,
+              `Captured **${viewports.length} viewports × ${SLIDES} slides = ${viewports.length * SLIDES} screenshots** from commit \`${context.sha.slice(0, 7)}\`.`,
               '',
-              '| Viewport | Slides captured | Slides |',
-              '|---|---|---|',
-              rows,
+              sections,
               '',
-              `> [Download all screenshots from the workflow artifacts](${artifactUrl})`,
+              `> [View workflow run & download full artifact](${runUrl})`,
             ].join('\n');
 
             // Create or update a sticky comment
             const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
+              owner,
+              repo,
               issue_number: context.issue.number,
             });
 
@@ -91,16 +113,14 @@ jobs:
 
             if (existing) {
               await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner, repo,
                 comment_id: existing.id,
                 body,
               });
               console.log('Updated existing Visual QA comment.');
             } else {
               await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
+                owner, repo,
                 issue_number: context.issue.number,
                 body,
               });

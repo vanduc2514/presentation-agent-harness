@@ -6,7 +6,7 @@
  * Serves the built presentation (output/index.html) on a local port,
  * then captures screenshots of the first few slides at each of several
  * viewport sizes.  All screenshots are written to screenshots/ at the
- * repo root.
+ * repo root (qa-screenshots/).
  *
  * Usage: node scripts/visual-qa.cjs
  * Pre-condition: `npm run build:markpress` must have run first.
@@ -22,7 +22,7 @@ const path         = require('path');
 const PORT         = 4173;
 const BASE_URL     = `http://localhost:${PORT}`;
 const OUTPUT_DIR   = path.join(__dirname, '..', 'output');
-const SCREENSHOT_DIR = path.join(__dirname, '..', 'screenshots');
+const SCREENSHOT_DIR = path.join(__dirname, '..', 'qa-screenshots');
 const SLIDES_TO_CAPTURE = 3;   // number of slides to capture per viewport
 const NAV_TIMEOUT  = 10_000;   // ms to wait for slide transitions
 
@@ -136,7 +136,7 @@ function startServer() {
       await context.close();
     }
 
-    console.log(`\n✅ Done. ${capturedFiles.length} screenshots saved to screenshots/`);
+    console.log(`\n✅ Done. ${capturedFiles.length} screenshots saved to qa-screenshots/`);
     capturedFiles.forEach((f) => console.log(`  ${f}`));
   } finally {
     await browser.close();
