@@ -330,7 +330,6 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
       scalerEl.style.left = '';
       scalerEl.style.width = '';
       scalerEl.style.height = '';
-      scalerEl.style.overflow = '';
       scalerEl.style.transform = '';
       return;
     }
@@ -344,7 +343,6 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     scalerEl.style.left = '0';
     scalerEl.style.width = PRES_W + 'px';
     scalerEl.style.height = PRES_H + 'px';
-    scalerEl.style.overflow = 'hidden';
     scalerEl.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
   }
   scalePres();
