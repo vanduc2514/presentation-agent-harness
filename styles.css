@@ -401,7 +401,9 @@ body {
 .step.past .dual-columns,
 .step.future .dual-columns,
 .step.past .timeline,
-.step.future .timeline {
+.step.future .timeline,
+.step.past .img-gallery,
+.step.future .img-gallery {
   display: none;
 }
 
@@ -456,6 +458,42 @@ body {
 
 .theme-closing {
   --accent-color: var(--closing-accent);
+}
+
+/* ── Image gallery (multi-image content slides) ────────────────────────────── */
+
+.img-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.img-gallery-item {
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+}
+
+.img-gallery-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  flex: 0 0 auto;
+}
+
+.img-gallery-item figcaption {
+  padding: 10px 14px;
+  font-size: 1.3rem;
+  color: var(--ink-medium);
+  line-height: 1.45;
+  flex: 1;
 }
 
 /* ── Slide navigation bar ──────────────────── */
@@ -662,7 +700,8 @@ body {
   .grid-panel,
   .nav-grid,
   .dual-columns,
-  .timeline {
+  .timeline,
+  .img-gallery {
     grid-template-columns: 1fr;
   }
 }

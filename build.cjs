@@ -251,9 +251,53 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
       if (scale > 5) step.classList.add('overview-step');
     }
 
-    // ── Split layout for slides that have a hero image ───────────────────────
-    var imgEl = step.querySelector('img');
-    if (imgEl) {
+    // ── Image layout detection ────────────────────────────────────────────────
+    var imgCount = step.querySelectorAll('img').length;
+
+    if (imgCount > 1) {
+      // ── Multi-image gallery: all images become slide content ─────────────────
+      var galleryShell = document.createElement('div');
+      galleryShell.className = 'step-shell';
+      galleryShell.innerHTML = step.innerHTML;
+      step.innerHTML = '';
+      step.appendChild(galleryShell);
+
+      // Capture image data and remove their wrapper <p> elements before
+      // processContent runs so they are not styled as lead/summary/note.
+      var galleryImgData = [];
+      Array.from(galleryShell.querySelectorAll('img')).forEach(function (img) {
+        galleryImgData.push({ src: img.src, alt: img.alt });
+        var wrapper = img.closest('p') || img.parentElement;
+        if (wrapper && wrapper !== galleryShell) {
+          wrapper.remove();
+        } else {
+          img.remove();
+        }
+      });
+
+      processContent(galleryShell, layout);
+
+      // Build and append the gallery after text content is processed.
+      if (galleryImgData.length > 0) {
+        var galleryDiv = document.createElement('div');
+        galleryDiv.className = 'img-gallery';
+        galleryImgData.forEach(function (data) {
+          var figEl = document.createElement('figure');
+          figEl.className = 'img-gallery-item';
+          var imgNew = document.createElement('img');
+          imgNew.src = data.src;
+          imgNew.alt = data.alt;
+          figEl.appendChild(imgNew);
+          var captionEl = document.createElement('figcaption');
+          captionEl.textContent = data.alt;
+          figEl.appendChild(captionEl);
+          galleryDiv.appendChild(figEl);
+        });
+        galleryShell.appendChild(galleryDiv);
+      }
+    } else if (imgCount === 1) {
+      // ── Split layout for slides that have a single hero image ────────────────
+      var imgEl = step.querySelector('img');
       // Remove the image wrapper paragraph from the step DOM before copying
       // innerHTML into the content card — avoids leaving an empty <p> behind.
       var imgWrapper = imgEl.closest('p') || imgEl.parentElement;
