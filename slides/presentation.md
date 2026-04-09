@@ -39,7 +39,7 @@ Any AI-native IDE that misses the basics is already disqualified.
 
 The model reasons, but the harness controls context, tools, state, and memory.
 
-![Car Engine](https://images.unsplash.com/photo-1764769488195-2abc51a556ee?q=80&w=800&auto=format&fit=crop)
+<p><img src="images/harness-engineering.png" alt="Harness Engineering" style="object-fit: contain; background: #1c1917;"></p>
 
 | Layer | Role |
 | --- | --- |
@@ -57,7 +57,7 @@ The model reasons, but the harness controls context, tools, state, and memory.
 
 Evaluate the system through coherent dimensions.
 
-![Cockpit control panel](https://images.unsplash.com/photo-1768554591368-292194a9f50c?w=1200&q=80&auto=format&fit=crop)
+![Car Engine](https://images.unsplash.com/photo-1764769488195-2abc51a556ee?q=80&w=800&auto=format&fit=crop)
 
 | Code | Label | Prompt | Target |
 | --- | --- | --- | --- |
@@ -95,23 +95,25 @@ If context quality collapses, the agent hallucinates, repeats mistakes, and lose
 
 Autonomy without runtime control is risk. Customization turns the agent from generic to team-native.
 
+![Cockpit control panel](https://images.unsplash.com/photo-1768554591368-292194a9f50c?w=1200&q=80&auto=format&fit=crop)
+
 <!-- goto: runtime-sovereignty-example -->
 
 ## Runtime Sovereignty
 
-- Pause and steer mid-task without losing state.
-- Branch or restore sessions at meaningful checkpoints.
-- Dispatch work through a predictable task queue.
-- Spawn sub-agents with visibility and merge control.
+- Pause and steer mid-task.
+- Branch / Restore at checkpoints.
+- Dispatch work through a task queue.
+- Spawn sub-agents.
 
 <!-- goto: teaching-agent-example -->
 
 ## Teaching the Agent
 
-- Encode constraints and conventions at project or org scope.
-- Drive consistency across sessions with repeatable protocols.
-- Hook agents into saves, test failures, CI, or PR events.
-- Swap models by task, budget, or local endpoint.
+- Encode constraints and conventions.
+- Drive consistency across sessions.
+- Hook agents into session events.
+- Swap models by providers.
 
 ------
 
