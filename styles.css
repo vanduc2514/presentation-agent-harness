@@ -555,6 +555,52 @@ body {
   color: var(--ink-strong);
 }
 
+.slide-repo-link {
+  position: fixed;
+  bottom: 10px;
+  left: 10px;
+  z-index: 100;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 47px;
+  height: 47px;
+  padding: 0;
+  border-radius: 50%;
+  background: rgba(255, 254, 250, 0.88);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 2px solid rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 1px var(--border), 0 2px 16px rgba(15, 23, 42, 0.1);
+  color: var(--ink-medium);
+  text-decoration: none;
+  font-family: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.slide-repo-link:hover,
+.slide-repo-link:focus-visible {
+  background: rgba(15, 23, 42, 0.07);
+  color: var(--ink-strong);
+  border-color: rgba(15, 23, 42, 0.18);
+  outline: none;
+}
+
+.slide-repo-link:active {
+  background: rgba(15, 23, 42, 0.12);
+  color: var(--ink-strong);
+}
+
+.slide-repo-link svg {
+  display: block;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 auto;
+}
+
 /* ─────────────────────────────────────────── */
 
 @media (max-width: 900px) {

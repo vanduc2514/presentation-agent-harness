@@ -21,6 +21,7 @@ const OUTPUT_DIR = path.join(ROOT, 'output');
 const HTML_OUT  = path.join(OUTPUT_DIR, 'index.html');
 const IMAGES_SRC = path.join(ROOT, 'slides', 'images');
 const IMAGES_DST = path.join(OUTPUT_DIR, 'images');
+const GITHUB_REPO_URL = 'https://github.com/vanduc2514/presentation-agent-harness';
 
 // ── Grid icons (replicated from src/render.js) ────────────────────────────────
 const GRID_ICONS = {
@@ -34,9 +35,10 @@ const GRID_ICONS = {
 const SVG_HOME = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>';
 const SVG_PREV = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>';
 const SVG_NEXT = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>';
+const SVG_GITHUB = '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297C5.373.297 0 5.67 0 12.297c0 5.302 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.726-4.042-1.608-4.042-1.608-.546-1.387-1.333-1.757-1.333-1.757-1.089-.744.084-.729.084-.729 1.204.085 1.838 1.237 1.838 1.237 1.07 1.835 2.807 1.305 3.492.998.107-.775.418-1.305.762-1.605-2.665-.303-5.466-1.332-5.466-5.93 0-1.31.469-2.382 1.236-3.221-.124-.303-.536-1.523.118-3.176 0 0 1.008-.322 3.3 1.23a11.5 11.5 0 0 1 3-.404c1.02.005 2.047.138 3 .404 2.29-1.552 3.297-1.23 3.297-1.23.654 1.653.243 2.873.118 3.176.77.839 1.235 1.911 1.235 3.221 0 4.602-2.805 5.625-5.475 5.922.43.372.815 1.103.815 2.222 0 1.606-.015 2.896-.015 3.289 0 .322.216.694.825.576C20.565 22.097 24 17.599 24 12.297 24 5.67 18.627.297 12 .297z"/></svg>';
 
 // ── Build the browser-side transformation + init script ───────────────────────
-function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
+function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svgNext, svgGithub) {
   return `
 (function () {
   'use strict';
@@ -300,6 +302,16 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     + 'Next${SVG_NEXT}</button>';
   document.body.appendChild(nav);
 
+  var repoLink = document.createElement('a');
+  repoLink.className = 'slide-repo-link';
+  repoLink.href = '${repoUrl}';
+  repoLink.target = '_blank';
+  repoLink.rel = 'noreferrer noopener';
+  repoLink.title = 'Open the GitHub repository';
+  repoLink.setAttribute('aria-label', 'Open the GitHub repository');
+  repoLink.innerHTML = '${svgGithub}';
+  document.body.appendChild(repoLink);
+
   // ── Viewport scaling ───────────────────────────────────────────────────────
   // impress.js hardcodes windowScale=1 and manages #impress positioning itself
   // (top:50%, left:50%, transform: perspective+scale on every step transition).
@@ -487,7 +499,11 @@ markpress(markdownSrc, markpressOptions)
     const transformScript = buildTransformScript(
       customCSS,
       JSON.stringify(GRID_ICONS),
-      SVG_HOME, SVG_PREV, SVG_NEXT
+      GITHUB_REPO_URL,
+      SVG_HOME,
+      SVG_PREV,
+      SVG_NEXT,
+      SVG_GITHUB
     );
     html = html.replace(
       '<script>impress().init();</script>',
