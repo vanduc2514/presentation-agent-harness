@@ -11,7 +11,7 @@
 
 const fs   = require('fs');
 const path = require('path');
-const markpress = require('./node_modules/markpress');
+const markpress = require('markpress');
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
 const ROOT      = __dirname;
@@ -215,9 +215,9 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
   // Configure the impress container
   var impressEl = document.getElementById('impress');
   if (impressEl) {
-    impressEl.setAttribute('data-width', '1920');
-    impressEl.setAttribute('data-height', '1080');
-    impressEl.setAttribute('data-max-scale', '12');
+    impressEl.setAttribute('data-width', '1600');
+    impressEl.setAttribute('data-height', '900');
+    impressEl.setAttribute('data-max-scale', '1');
     impressEl.setAttribute('data-min-scale', '0');
     impressEl.setAttribute('data-transition-duration', '500');
   }
@@ -300,9 +300,60 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     + 'Next${SVG_NEXT}</button>';
   document.body.appendChild(nav);
 
+  // ── Viewport scaling ───────────────────────────────────────────────────────
+  // impress.js hardcodes windowScale=1 and manages #impress positioning itself
+  // (top:50%, left:50%, transform: perspective+scale on every step transition).
+  // We wrap #impress in a fixed #impress-scaler div and scale/position the
+  // wrapper instead, so impress.js can freely mutate #impress without conflict.
+  // Only applied for viewport ≥ 768px; smaller viewports use CSS media queries.
+  var PRES_W = 1600, PRES_H = 900;
+  // Margin kept around the slide as a fraction of the viewport dimension (8%).
+  // This keeps the slide centered with visible breathing room on all viewports,
+  // matching the desktop look (desktop stays at scale=1 because 8% of 1920px = 154px
+  // which does not push the scale below 1.0, while laptop gets ~115px side margins).
+  var SLIDE_MARGIN_RATIO = 0.08;
+  var scalerEl = null;
+  if (impressEl) {
+    scalerEl = document.createElement('div');
+    scalerEl.id = 'impress-scaler';
+    impressEl.parentNode.insertBefore(scalerEl, impressEl);
+    scalerEl.appendChild(impressEl);
+  }
+
+  function scalePres() {
+    if (!scalerEl) return;
+    var vw = window.innerWidth;
+    var vh = window.innerHeight;
+    if (vw < 768) {
+      scalerEl.style.position = '';
+      scalerEl.style.top = '';
+      scalerEl.style.left = '';
+      scalerEl.style.width = '';
+      scalerEl.style.height = '';
+      scalerEl.style.overflow = '';
+      scalerEl.style.transform = '';
+      return;
+    }
+    var pad_h = Math.round(vw * SLIDE_MARGIN_RATIO);
+    var pad_v = Math.round(vh * SLIDE_MARGIN_RATIO);
+    var s = Math.min((vw - pad_h * 2) / PRES_W, (vh - pad_v * 2) / PRES_H, 1);
+    var tx = (vw - PRES_W * s) / 2;
+    var ty = (vh - PRES_H * s) / 2;
+    scalerEl.style.position = 'fixed';
+    scalerEl.style.top = '0';
+    scalerEl.style.left = '0';
+    scalerEl.style.width = PRES_W + 'px';
+    scalerEl.style.height = PRES_H + 'px';
+    scalerEl.style.overflow = 'hidden';
+    scalerEl.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
+  }
+  scalePres();
+
   // ── Init impress ───────────────────────────────────────────────────────────
   var api = window.impress();
   api.init();
+
+  window.addEventListener('resize', scalePres);
 
   document.getElementById('nav-home').addEventListener('click', function () {
     api.goto(steps[0]);

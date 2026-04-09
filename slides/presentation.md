@@ -195,7 +195,7 @@ The strongest harnesses extend beyond the editor into workflow orchestration.
 
 <p class="eyebrow">Group D · Extended Features</p>
 
-# Extended Feaures Example
+# Extended Features Example
 
 A hands-on walk-through of translating intent into requirements and implementation.
 
