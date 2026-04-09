@@ -1,0 +1,128 @@
+name: Visual QA
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  visual-qa:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install dependencies
+        run: npm ci --no-audit
+
+      - name: Build presentation
+        run: npm run build:markpress
+
+      - name: Install Playwright Chromium browser
+        run: npx playwright install chromium --with-deps
+
+      - name: Run Visual QA (capture screenshots)
+        run: node scripts/visual-qa.cjs
+
+      - name: Commit screenshots to branch
+        id: commit-screenshots
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add qa-screenshots/ 2>/dev/null || true
+          if git diff --cached --quiet; then
+            echo "No changes to commit"
+            echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "chore: update visual QA screenshots [skip ci]"
+            git push origin HEAD:${{ github.head_ref }}
+            echo "sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Upload screenshots as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-qa-screenshots
+          path: qa-screenshots/
+          if-no-files-found: error
+
+      - name: Post Visual QA screenshots to PR
+        uses: actions/github-script@v7
+        env:
+          SCREENSHOTS_SHA: ${{ steps.commit-screenshots.outputs.sha }}
+        with:
+          script: |
+            const sha    = process.env.SCREENSHOTS_SHA;
+            const owner  = context.repo.owner;
+            const repo   = context.repo.repo;
+            const runUrl = `https://github.com/${owner}/${repo}/actions/runs/${context.runId}`;
+
+            const viewports = [
+              { name: 'desktop-1920x1080', label: 'Desktop (1920×1080)' },
+              { name: 'laptop-1440x900',   label: 'Laptop  (1440×900)'  },
+              { name: 'laptop-1280x800',   label: 'Laptop  (1280×800)'  },
+              { name: 'tablet-768x1024',   label: 'Tablet  (768×1024)'  },
+              { name: 'mobile-390x844',    label: 'Mobile  (390×844)'   },
+            ];
+            const SLIDES = 3;
+
+            // Build one collapsible section per viewport, each containing
+            // a row of slide screenshots embedded as inline images.
+            const sections = viewports.map(vp => {
+              const images = Array.from({ length: SLIDES }, (_, i) => {
+                const file = `${vp.name}_slide-${String(i + 1).padStart(2, '0')}.png`;
+                const url  = `https://raw.githubusercontent.com/${owner}/${repo}/${sha}/qa-screenshots/${file}`;
+                return `**Slide ${i + 1}**\n![${vp.label} – slide ${i + 1}](${url})`;
+              }).join('\n\n');
+
+              return `<details>\n<summary>${vp.label}</summary>\n\n${images}\n\n</details>`;
+            }).join('\n\n');
+
+            const body = [
+              '## 📸 Visual QA — Screenshots',
+              '',
+              `Captured **${viewports.length} viewports × ${SLIDES} slides = ${viewports.length * SLIDES} screenshots** from commit \`${context.sha.slice(0, 7)}\`.`,
+              '',
+              sections,
+              '',
+              `> [View workflow run & download full artifact](${runUrl})`,
+            ].join('\n');
+
+            // Create or update a sticky comment
+            const { data: comments } = await github.rest.issues.listComments({
+              owner,
+              repo,
+              issue_number: context.issue.number,
+            });
+
+            const marker = '## 📸 Visual QA — Screenshots';
+            const existing = comments.find(c =>
+              c.user.login === 'github-actions[bot]' && c.body.startsWith(marker)
+            );
+
+            if (existing) {
+              await github.rest.issues.updateComment({
+                owner, repo,
+                comment_id: existing.id,
+                body,
+              });
+              console.log('Updated existing Visual QA comment.');
+            } else {
+              await github.rest.issues.createComment({
+                owner, repo,
+                issue_number: context.issue.number,
+                body,
+              });
+              console.log('Created new Visual QA comment.');
+            }
