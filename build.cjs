@@ -375,8 +375,9 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
 
   // ── Reset scroll position whenever a slide becomes active ─────────────────
   document.addEventListener('impress:stepenter', function (e) {
-    var scrollable = e.target.querySelector('.step-shell, .step-content-card');
-    if (scrollable) scrollable.scrollTop = 0;
+    e.target.querySelectorAll('.step-shell, .step-content-card').forEach(function (el) {
+      el.scrollTop = 0;
+    });
   });
 
   // ── Swipe left / right to navigate slides ─────────────────────────────────
@@ -387,7 +388,10 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
 
   document.addEventListener('touchstart', function (e) {
     // Ignore multi-touch gestures (pinch/zoom)
-    if (e.touches.length !== 1) { swipeTouchId = null; return; }
+    if (e.touches.length !== 1) {
+      swipeTouchId = null;
+      return;
+    }
     swipeTouchId = e.touches[0].identifier;
     swipeTouchStartX = e.touches[0].clientX;
     swipeTouchStartY = e.touches[0].clientY;
