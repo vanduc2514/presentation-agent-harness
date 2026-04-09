@@ -215,9 +215,9 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
   // Configure the impress container
   var impressEl = document.getElementById('impress');
   if (impressEl) {
-    impressEl.setAttribute('data-width', '1920');
-    impressEl.setAttribute('data-height', '1080');
-    impressEl.setAttribute('data-max-scale', '12');
+    impressEl.setAttribute('data-width', '1600');
+    impressEl.setAttribute('data-height', '900');
+    impressEl.setAttribute('data-max-scale', '1');
     impressEl.setAttribute('data-min-scale', '0');
     impressEl.setAttribute('data-transition-duration', '500');
   }
@@ -306,9 +306,19 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
   // Only applied for viewport ≥ 768px; smaller viewports use CSS media queries.
   var PRES_W = 1600, PRES_H = 900;
   function scalePres() {
+    if (!impressEl) return;
     var vw = window.innerWidth;
     var vh = window.innerHeight;
-    if (vw < 768) return;
+    if (vw < 768) {
+      impressEl.style.position = '';
+      impressEl.style.top = '';
+      impressEl.style.left = '';
+      impressEl.style.width = '';
+      impressEl.style.height = '';
+      impressEl.style.transformOrigin = '';
+      impressEl.style.transform = '';
+      return;
+    }
     var s = Math.min(vw / PRES_W, vh / PRES_H, 1);
     var tx = (vw - PRES_W * s) / 2;
     var ty = (vh - PRES_H * s) / 2;
@@ -320,11 +330,17 @@ function buildTransformScript(css, gridIconsJson, svgHome, svgPrev, svgNext) {
     impressEl.style.transformOrigin = 'top left';
     impressEl.style.transform = 'translate(' + tx + 'px,' + ty + 'px) scale(' + s + ')';
   }
-  scalePres();
 
   // ── Init impress ───────────────────────────────────────────────────────────
   var api = window.impress();
   api.init();
+
+  // Re-apply scaling after impress.js init overwrites #impress transform
+  if (window.requestAnimationFrame) {
+    window.requestAnimationFrame(scalePres);
+  } else {
+    scalePres();
+  }
 
   window.addEventListener('resize', scalePres);
 
