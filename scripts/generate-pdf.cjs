@@ -7,12 +7,12 @@
  * high-resolution screenshot of each one (nav bar and UI buttons hidden),
  * assembles them into an A4-landscape print HTML, and converts it to PDF.
  *
- * Usage:  node scripts/generate-pdf.cjs <pdf-filename>
+ * Usage:  node scripts/generate-pdf.cjs <pdf-filename> <repo-url>
  * Pre-condition: `npm run build:markpress` must have run first.
  */
 
 const { chromium } = require('playwright');
-const { spawn }    = require('child_process');
+const http         = require('http');
 const fs           = require('fs');
 const path         = require('path');
 
@@ -21,7 +21,6 @@ const path         = require('path');
 const PORT         = 4174; // different port from visual-qa.cjs (4173)
 const BASE_URL     = `http://localhost:${PORT}`;
 const OUTPUT_DIR   = path.join(__dirname, '..', 'output');
-const GITHUB_REPO_URL = 'https://github.com/vanduc2514/presentation-agent-harness';
 const NAV_TIMEOUT  = 10_000;
 
 const PDF_FILENAME = process.argv[2];
@@ -29,6 +28,14 @@ if (!PDF_FILENAME) {
   console.error('ERROR: PDF filename argument is required (e.g. presentation-agent-harness-a1b2c3d.pdf)');
   process.exit(1);
 }
+
+// Repo URL is passed from build.cjs so it stays in sync with the UI button URL
+const GITHUB_REPO_URL = process.argv[3];
+if (!GITHUB_REPO_URL) {
+  console.error('ERROR: repo URL argument is required (e.g. https://github.com/owner/repo)');
+  process.exit(1);
+}
+
 const PDF_OUT = path.join(OUTPUT_DIR, PDF_FILENAME);
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
@@ -37,30 +44,41 @@ function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// MIME types for static file serving
+const MIME_TYPES = {
+  '.html': 'text/html',
+  '.js':   'application/javascript',
+  '.css':  'text/css',
+  '.png':  'image/png',
+  '.jpg':  'image/jpeg',
+  '.jpeg': 'image/jpeg',
+  '.svg':  'image/svg+xml',
+  '.ico':  'image/x-icon',
+  '.json': 'application/json',
+  '.woff': 'font/woff',
+  '.woff2': 'font/woff2',
+};
+
 function startServer() {
   return new Promise((resolve, reject) => {
-    const server = spawn(
-      'npx', ['serve', OUTPUT_DIR, '-l', String(PORT), '--no-clipboard'],
-      { stdio: ['ignore', 'pipe', 'pipe'], detached: true }
-    );
+    const server = http.createServer((req, res) => {
+      const urlPath  = req.url === '/' ? '/index.html' : req.url.split('?')[0];
+      const filePath = path.join(OUTPUT_DIR, urlPath);
 
-    let resolved = false;
+      fs.readFile(filePath, (err, data) => {
+        if (err) {
+          res.writeHead(404);
+          res.end('Not found');
+          return;
+        }
+        const ext = path.extname(filePath).toLowerCase();
+        res.writeHead(200, { 'Content-Type': MIME_TYPES[ext] || 'application/octet-stream' });
+        res.end(data);
+      });
+    });
 
-    function onData(data) {
-      const text = data.toString();
-      if (!resolved && text.includes(String(PORT))) {
-        resolved = true;
-        resolve(server);
-      }
-    }
-
-    server.stdout.on('data', onData);
-    server.stderr.on('data', onData);
+    server.listen(PORT, 'localhost', () => resolve(server));
     server.on('error', reject);
-
-    setTimeout(() => {
-      if (!resolved) { resolved = true; resolve(server); }
-    }, 10_000);
   });
 }
 
@@ -74,7 +92,6 @@ function startServer() {
 
   console.log(`Starting server on port ${PORT}…`);
   const serverProcess = await startServer();
-  await sleep(1_000);
 
   const browser = await chromium.launch();
 
@@ -194,11 +211,7 @@ ${pagesHtml}
     await printPage.close();
   } finally {
     await browser.close();
-    try {
-      process.kill(-serverProcess.pid, 'SIGTERM');
-    } catch (_) {
-      serverProcess.kill();
-    }
+    serverProcess.close();
   }
 })().catch((err) => {
   console.error('PDF generation failed:', err);

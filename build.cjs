@@ -22,7 +22,10 @@ const OUTPUT_DIR = path.join(ROOT, 'output');
 const HTML_OUT  = path.join(OUTPUT_DIR, 'index.html');
 const IMAGES_SRC = path.join(ROOT, 'slides', 'images');
 const IMAGES_DST = path.join(OUTPUT_DIR, 'images');
-const GITHUB_REPO_URL = 'https://github.com/vanduc2514/presentation-agent-harness';
+// In CI the URL is injected via BUILD_REPO_URL; fall back to the canonical URL for local builds.
+const GITHUB_REPO_URL = process.env.BUILD_REPO_URL
+  ? process.env.BUILD_REPO_URL.toString().trim()
+  : 'https://github.com/vanduc2514/presentation-agent-harness';
 
 // ── PDF filename (includes short commit hash for cache-busting) ───────────────
 // In CI the hash is injected via BUILD_GIT_SHA; fall back to git for local builds.
@@ -556,7 +559,7 @@ markpress(markdownSrc, markpressOptions)
 
     // 7. Generate PDF (requires Playwright Chromium to be installed)
     console.log(`Generating PDF: ${PDF_FILENAME}…`);
-    execFileSync('node', [path.join(ROOT, 'scripts', 'generate-pdf.cjs'), PDF_FILENAME], {
+    execFileSync('node', [path.join(ROOT, 'scripts', 'generate-pdf.cjs'), PDF_FILENAME, GITHUB_REPO_URL], {
       stdio: 'inherit',
       cwd: ROOT,
     });
