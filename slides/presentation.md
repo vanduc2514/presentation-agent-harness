@@ -123,7 +123,11 @@ Autonomy without runtime control is risk. Customization turns the agent from gen
 
 # Runtime Sovereignty Example
 
-A hands-on walk-through of pausing, branching, and steering agents mid-task.
+![Monitoring parallel agent task queues across multiple editor panes](https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Branching at a safe checkpoint to preserve agent progress](https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Spawning sub-agents for parallel delegated work](https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
 
 ------
 
@@ -133,7 +137,9 @@ A hands-on walk-through of pausing, branching, and steering agents mid-task.
 
 # Teaching the Agent Example
 
-A hands-on walk-through of encoding constraints, hooks, and model routing.
+![Encoding team conventions and constraints in an AGENTS.md file](https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Configuring custom hooks and model routing per session event](https://images.pexels.com/photos/270360/pexels-photo-270360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
 
 ------
 
@@ -162,7 +168,13 @@ Agents write files, run commands, call APIs, and inspect secrets. Trust requires
 
 # Safety Example
 
-A hands-on walk-through of per-tool permissions and approval gates.
+![Per-tool permission configuration in the IDE settings panel](https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Approval gate dialog before a destructive file operation](https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Prompt injection pattern detected and blocked by the harness](https://images.pexels.com/photos/270348/pexels-photo-270348.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Agent execution in an isolated sandbox container environment](https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
 
 ------
 
@@ -172,7 +184,11 @@ A hands-on walk-through of per-tool permissions and approval gates.
 
 # Observability Example
 
-A hands-on walk-through of troubleshooting AI Agent.
+![Navigating the agent trace to find where reasoning diverged](https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Live tool call timeline with prompt and response inspection](https://images.pexels.com/photos/669996/pexels-photo-669996.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Debug log capture showing chronological tool call sequence](https://images.pexels.com/photos/574077/pexels-photo-574077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
 
 ------
 
@@ -199,7 +215,9 @@ The strongest harnesses extend beyond the editor into workflow orchestration.
 
 # Extended Features Example
 
-A hands-on walk-through of translating intent into requirements and implementation.
+![Structured requirements spec generated from a plain-language prompt](https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+
+![Agent-driven code implementation produced from the approved spec](https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
 
 ------
 

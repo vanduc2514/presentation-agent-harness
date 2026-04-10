@@ -401,7 +401,9 @@ body {
 .step.past .dual-columns,
 .step.future .dual-columns,
 .step.past .timeline,
-.step.future .timeline {
+.step.future .timeline,
+.step.past .img-gallery,
+.step.future .img-gallery {
   display: none;
 }
 
@@ -456,6 +458,156 @@ body {
 
 .theme-closing {
   --accent-color: var(--closing-accent);
+}
+
+/* ── Image gallery (multi-image content slides) ────────────────────────────── */
+
+.img-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+/* Count-specific column layouts */
+.img-gallery--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.img-gallery--count-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.img-gallery--count-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Gallery shell: flex column so gallery stretches to fill remaining height */
+.has-gallery {
+  min-height: 900px;
+  display: flex;
+  flex-direction: column;
+}
+
+.has-gallery .img-gallery {
+  flex: 1;
+  min-height: 0;
+  margin-top: 24px;
+}
+
+.img-gallery-item {
+  margin: 0;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  transition: box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.img-gallery-item:hover {
+  box-shadow: 0 4px 24px rgba(15, 23, 42, 0.14);
+  transform: translateY(-2px);
+}
+
+/* Gallery items stretch to fill grid cell height */
+.has-gallery .img-gallery-item {
+  min-height: 0;
+}
+
+.img-gallery-item img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  flex: 0 0 auto;
+  cursor: zoom-in;
+}
+
+/* Images in a filling gallery take all remaining cell height */
+.has-gallery .img-gallery-item img {
+  flex: 1;
+  height: 100%;
+  min-height: 0;
+}
+
+/* Taller images for 2-col layouts (wider cells need more height) */
+.img-gallery--count-2 .img-gallery-item img { height: 260px; }
+.has-gallery .img-gallery--count-2 .img-gallery-item img { height: 100%; }
+
+.img-gallery-item figcaption {
+  padding: 10px 14px;
+  font-size: 1.3rem;
+  color: var(--ink-medium);
+  line-height: 1.45;
+  flex: 0 0 auto;
+}
+
+/* ── Image lightbox ─────────────────────────────────────────────────────────── */
+
+.img-lightbox-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9000;
+  background: rgba(15, 23, 42, 0.70);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: zoom-out;
+}
+
+.img-lightbox-frame {
+  position: relative;
+  max-width: 88vw;
+  max-height: 88vh;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  box-shadow: 0 32px 80px rgba(15, 23, 42, 0.42);
+  background: var(--surface);
+  display: flex;
+  flex-direction: column;
+  cursor: default;
+}
+
+.img-lightbox-img {
+  display: block;
+  max-width: 88vw;
+  max-height: 80vh;
+  object-fit: contain;
+  flex: 1;
+  min-height: 0;
+}
+
+.img-lightbox-caption {
+  padding: 12px 20px;
+  font-size: 1.4rem;
+  color: var(--ink-medium);
+  line-height: 1.45;
+  text-align: center;
+  flex: 0 0 auto;
+  border-top: 1px solid var(--border);
+}
+
+.img-lightbox-close {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 254, 250, 0.92);
+  border: 1px solid var(--border);
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.12);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  color: var(--ink-strong);
+  transition: background 0.15s ease, box-shadow 0.15s ease;
+  z-index: 1;
+}
+
+.img-lightbox-close:hover {
+  background: rgba(255, 254, 250, 1);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.18);
 }
 
 /* ── Slide navigation bar ──────────────────── */
@@ -662,7 +814,8 @@ body {
   .grid-panel,
   .nav-grid,
   .dual-columns,
-  .timeline {
+  .timeline,
+  .img-gallery {
     grid-template-columns: 1fr;
   }
 }
@@ -671,6 +824,10 @@ body {
   .step-shell {
     min-height: 0;
     padding: 24px 20px;
+  }
+
+  .has-gallery {
+    min-height: 0;
   }
 
   .slide-title {

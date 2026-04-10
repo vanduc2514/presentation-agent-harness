@@ -251,9 +251,56 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
       if (scale > 5) step.classList.add('overview-step');
     }
 
-    // ── Split layout for slides that have a hero image ───────────────────────
-    var imgEl = step.querySelector('img');
-    if (imgEl) {
+    // ── Image layout detection ────────────────────────────────────────────────
+    var imgCount = step.querySelectorAll('img').length;
+
+    if (imgCount > 1) {
+      // ── Multi-image gallery: all images become slide content ─────────────────
+      var galleryShell = document.createElement('div');
+      galleryShell.className = 'step-shell';
+      galleryShell.innerHTML = step.innerHTML;
+      step.innerHTML = '';
+      step.appendChild(galleryShell);
+
+      // Capture image data and remove their wrapper <p> elements before
+      // processContent runs so they are not styled as lead/summary/note.
+      var galleryImgData = [];
+      Array.from(galleryShell.querySelectorAll('img')).forEach(function (img) {
+        galleryImgData.push({ src: img.src, alt: img.alt });
+        var wrapper = img.closest('p') || img.parentElement;
+        if (wrapper && wrapper !== galleryShell) {
+          wrapper.remove();
+        } else {
+          img.remove();
+        }
+      });
+
+      processContent(galleryShell, layout);
+
+      // Build and append the gallery after text content is processed.
+      if (galleryImgData.length > 0) {
+        galleryShell.classList.add('has-gallery');
+        var galleryDiv = document.createElement('div');
+        galleryDiv.className = 'img-gallery img-gallery--count-' + galleryImgData.length;
+        galleryImgData.forEach(function (data) {
+          var figEl = document.createElement('figure');
+          figEl.className = 'img-gallery-item';
+          var imgNew = document.createElement('img');
+          imgNew.src = data.src;
+          imgNew.alt = data.alt;
+          imgNew.loading = 'lazy';
+          imgNew.decoding = 'async';
+          figEl.appendChild(imgNew);
+          var captionEl = document.createElement('figcaption');
+          captionEl.textContent = data.alt;
+          figEl.appendChild(captionEl);
+          galleryDiv.appendChild(figEl);
+        });
+        galleryShell.appendChild(galleryDiv);
+      }
+    } else if (imgCount === 1) {
+      // ── Split layout for slides that have a single hero image ────────────────
+      var imgEl = step.querySelector('img');
       // Remove the image wrapper paragraph from the step DOM before copying
       // innerHTML into the content card — avoids leaving an empty <p> behind.
       var imgWrapper = imgEl.closest('p') || imgEl.parentElement;
@@ -394,6 +441,71 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
     event.preventDefault();
     api.goto(target.dataset.goto);
   });
+
+  // ── Image lightbox ─────────────────────────────────────────────────────────
+  (function () {
+    var SVG_CLOSE = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+    var overlay = document.createElement('div');
+    overlay.className = 'img-lightbox-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Image preview');
+    overlay.style.display = 'none';
+
+    var frame = document.createElement('div');
+    frame.className = 'img-lightbox-frame';
+
+    var lightboxImg = document.createElement('img');
+    lightboxImg.className = 'img-lightbox-img';
+
+    var captionEl = document.createElement('div');
+    captionEl.className = 'img-lightbox-caption';
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'img-lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Close preview');
+    closeBtn.innerHTML = SVG_CLOSE;
+
+    frame.appendChild(closeBtn);
+    frame.appendChild(lightboxImg);
+    frame.appendChild(captionEl);
+    overlay.appendChild(frame);
+    document.body.appendChild(overlay);
+
+    function openLightbox(src, alt) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      captionEl.textContent = alt || '';
+      overlay.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      overlay.style.display = 'none';
+      lightboxImg.src = '';
+    }
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeLightbox();
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.style.display !== 'none') {
+        closeLightbox();
+      }
+    });
+
+    // Capture-phase listener registered BEFORE the click-to-advance blocker below,
+    // so it runs first and can intercept gallery image clicks cleanly.
+    document.addEventListener('click', function (e) {
+      var target = e.target.closest('.img-gallery-item img');
+      if (!target) return;
+      e.stopImmediatePropagation(); // prevent the advance-blocker and impress.js handlers
+      openLightbox(target.src, target.alt);
+    }, true);
+  }());
 
   // ── Disable click-to-advance on slide background ──────────────────────────
   // impress.js has a built-in handler that advances to whichever .step the user
