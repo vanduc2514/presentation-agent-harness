@@ -855,8 +855,16 @@ body {
   }
 
   /* Nav bar sits in the body flex flow but stays fixed at bottom */
+  /* Constrain width so it doesn't overlap the circular buttons on each side */
+  /* Each button is 44px wide + 10px margin = 54px per side → 108px total */
   .slide-nav {
     position: fixed;
     bottom: 10px;
+    max-width: calc(100% - 128px);
+  }
+
+  .slide-nav-btn {
+    padding: 7px 10px;
+    font-size: 0.8rem;
   }
 }
