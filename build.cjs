@@ -443,6 +443,18 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
   }
   fixBodyOverflow();
 
+  // impress.js calls window.scrollTo(0, 0) inside goto() on every slide
+  // transition (including the resize-triggered ones).  On the mobile layout the
+  // body is the scrolling container, so this resets the user's scroll position.
+  // Suppress only that specific top-left reset while the mobile layout is active;
+  // all other scroll calls (anchors, smooth scroll, options form, etc.) pass through.
+  var _origScrollTo = window.scrollTo.bind(window);
+  window.scrollTo = function () {
+    var isMobileReset = window.innerWidth < 768 &&
+      arguments.length >= 2 && arguments[0] === 0 && arguments[1] === 0;
+    if (!isMobileReset) _origScrollTo.apply(window, arguments);
+  };
+
   window.addEventListener('resize', function () { scalePres(); fixBodyOverflow(); });
 
   document.getElementById('nav-home').addEventListener('click', function () {
