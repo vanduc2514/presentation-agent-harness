@@ -563,8 +563,8 @@ body {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 47px;
-  height: 47px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border-radius: 50%;
   background: rgba(255, 254, 250, 0.88);
@@ -604,13 +604,13 @@ body {
 .slide-download-link {
   position: fixed;
   bottom: 10px;
-  left: 65px; /* 10px margin + 47px github button + 8px gap */
+  right: 10px;
   z-index: 100;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 47px;
-  height: 47px;
+  width: 44px;
+  height: 44px;
   padding: 0;
   border-radius: 50%;
   background: rgba(255, 254, 250, 0.88);
