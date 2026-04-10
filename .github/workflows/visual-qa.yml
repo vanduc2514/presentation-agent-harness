@@ -25,11 +25,11 @@ jobs:
       - name: Install dependencies
         run: npm ci --no-audit
 
-      - name: Build presentation
-        run: npm run build:markpress
-
       - name: Install Playwright Chromium browser
         run: npx playwright install chromium --with-deps
+
+      - name: Build presentation
+        run: npm run build:markpress
 
       - name: Run Visual QA (capture screenshots)
         run: node scripts/visual-qa.cjs
