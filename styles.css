@@ -90,7 +90,7 @@ body {
   border-radius: 28px;
   background: var(--surface);
   border: 1px solid var(--border);
-  min-height: 900px;
+  height: 900px;
   overflow: hidden;
 }
 
@@ -224,6 +224,8 @@ body {
   gap: 18px;
   margin-top: 28px;
 }
+
+.grid-panel--count-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 
 .info-card,
 .stack-card,
@@ -476,7 +478,6 @@ body {
 
 /* Gallery shell: flex column so gallery stretches to fill remaining height */
 .has-gallery {
-  min-height: 900px;
   display: flex;
   flex-direction: column;
 }
