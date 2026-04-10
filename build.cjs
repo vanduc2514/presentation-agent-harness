@@ -11,7 +11,7 @@
 
 const fs             = require('fs');
 const path           = require('path');
-const { execFileSync, execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const markpress = require('markpress');
 
 // ── Paths ─────────────────────────────────────────────────────────────────────
@@ -31,7 +31,7 @@ const GITHUB_REPO_URL = process.env.BUILD_REPO_URL
 // In CI the hash is injected via BUILD_GIT_SHA; fall back to git for local builds.
 const GIT_HASH = process.env.BUILD_GIT_SHA
   ? process.env.BUILD_GIT_SHA.toString().trim().slice(0, 7)
-  : execSync('git rev-parse --short=7 HEAD', { cwd: ROOT }).toString().trim();
+  : '';
 const PDF_FILENAME = `presentation-agent-harness-${GIT_HASH}.pdf`;
 
 // ── Grid icons (replicated from src/render.js) ────────────────────────────────
@@ -61,7 +61,7 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
 
   function renderGridPanel(rows) {
     var div = document.createElement('div');
-    div.className = 'grid-panel';
+    div.className = 'grid-panel grid-panel--count-' + rows.length;
     div.innerHTML = rows.map(function (row) {
       var label = row[0];
       var text  = row[1];
