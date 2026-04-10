@@ -445,6 +445,15 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
 
   window.addEventListener('resize', function () { scalePres(); fixBodyOverflow(); });
 
+  // On mobile, impress.js re-applies overflow:hidden / height:100% on the body
+  // during every step transition.  Re-strip those inline styles and reset the
+  // scroll position to the top of the new slide so the content is always
+  // readable from the beginning after navigating.
+  document.addEventListener('impress:stepenter', function () {
+    fixBodyOverflow();
+    if (window.innerWidth < 768) window.scrollTo(0, 0);
+  });
+
   document.getElementById('nav-home').addEventListener('click', function () {
     api.goto(steps[0]);
   });
