@@ -476,7 +476,7 @@ body {
 
 /* Gallery shell: flex column so gallery stretches to fill remaining height */
 .has-gallery {
-  height: 900px;
+  min-height: 900px;
   display: flex;
   flex-direction: column;
 }
@@ -495,7 +495,6 @@ body {
   background: #ffffff;
   display: flex;
   flex-direction: column;
-  cursor: zoom-in;
   transition: box-shadow 0.18s ease, transform 0.18s ease;
 }
 
@@ -516,6 +515,7 @@ body {
   object-position: center;
   display: block;
   flex: 0 0 auto;
+  cursor: zoom-in;
 }
 
 /* Images in a filling gallery take all remaining cell height */
@@ -824,6 +824,10 @@ body {
   .step-shell {
     min-height: 0;
     padding: 24px 20px;
+  }
+
+  .has-gallery {
+    min-height: 0;
   }
 
   .slide-title {

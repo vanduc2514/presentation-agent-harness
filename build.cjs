@@ -288,6 +288,8 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
           var imgNew = document.createElement('img');
           imgNew.src = data.src;
           imgNew.alt = data.alt;
+          imgNew.loading = 'lazy';
+          imgNew.decoding = 'async';
           figEl.appendChild(imgNew);
           var captionEl = document.createElement('figcaption');
           captionEl.textContent = data.alt;
