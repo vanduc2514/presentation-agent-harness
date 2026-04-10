@@ -1,4 +1,8 @@
-# Intructions for AI Agent 
+# AGENTS.md
+
+Instructions for AI Agent working on this presentation.
+
+## Project Structure
 
 This project contains a presentation in markdown format, use `markpress` to render into HTML page and publish as a Docker Image.
 
