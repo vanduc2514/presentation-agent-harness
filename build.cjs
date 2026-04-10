@@ -279,6 +279,7 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
 
       // Build and append the gallery after text content is processed.
       if (galleryImgData.length > 0) {
+        galleryShell.classList.add('has-gallery');
         var galleryDiv = document.createElement('div');
         galleryDiv.className = 'img-gallery img-gallery--count-' + galleryImgData.length;
         galleryImgData.forEach(function (data) {
@@ -438,6 +439,71 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
     event.preventDefault();
     api.goto(target.dataset.goto);
   });
+
+  // ── Image lightbox ─────────────────────────────────────────────────────────
+  (function () {
+    var SVG_CLOSE = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+
+    var overlay = document.createElement('div');
+    overlay.className = 'img-lightbox-overlay';
+    overlay.setAttribute('role', 'dialog');
+    overlay.setAttribute('aria-modal', 'true');
+    overlay.setAttribute('aria-label', 'Image preview');
+    overlay.style.display = 'none';
+
+    var frame = document.createElement('div');
+    frame.className = 'img-lightbox-frame';
+
+    var lightboxImg = document.createElement('img');
+    lightboxImg.className = 'img-lightbox-img';
+
+    var captionEl = document.createElement('div');
+    captionEl.className = 'img-lightbox-caption';
+
+    var closeBtn = document.createElement('button');
+    closeBtn.className = 'img-lightbox-close';
+    closeBtn.setAttribute('aria-label', 'Close preview');
+    closeBtn.innerHTML = SVG_CLOSE;
+
+    frame.appendChild(closeBtn);
+    frame.appendChild(lightboxImg);
+    frame.appendChild(captionEl);
+    overlay.appendChild(frame);
+    document.body.appendChild(overlay);
+
+    function openLightbox(src, alt) {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || '';
+      captionEl.textContent = alt || '';
+      overlay.style.display = 'flex';
+    }
+
+    function closeLightbox() {
+      overlay.style.display = 'none';
+      lightboxImg.src = '';
+    }
+
+    overlay.addEventListener('click', function (e) {
+      if (e.target === overlay) closeLightbox();
+    });
+
+    closeBtn.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && overlay.style.display !== 'none') {
+        closeLightbox();
+      }
+    });
+
+    // Capture-phase listener registered BEFORE the click-to-advance blocker below,
+    // so it runs first and can intercept gallery image clicks cleanly.
+    document.addEventListener('click', function (e) {
+      var target = e.target.closest('.img-gallery-item img');
+      if (!target) return;
+      e.stopImmediatePropagation(); // prevent the advance-blocker and impress.js handlers
+      openLightbox(target.src, target.alt);
+    }, true);
+  }());
 
   // ── Disable click-to-advance on slide background ──────────────────────────
   // impress.js has a built-in handler that advances to whichever .step the user
