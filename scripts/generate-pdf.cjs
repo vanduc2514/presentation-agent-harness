@@ -12,6 +12,7 @@
  */
 
 const { chromium } = require('playwright');
+const { execFileSync } = require('child_process');
 const http         = require('http');
 const fs           = require('fs');
 const path         = require('path');
@@ -42,6 +43,32 @@ const PDF_OUT = path.join(OUTPUT_DIR, PDF_FILENAME);
 
 function sleep(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+function installChromium() {
+  console.log('Playwright Chromium not found. Installing browser binary…');
+  execFileSync('npx', ['playwright', 'install', 'chromium'], {
+    stdio: 'inherit',
+    cwd: path.join(__dirname, '..'),
+  });
+}
+
+async function launchBrowser() {
+  try {
+    return await chromium.launch();
+  } catch (err) {
+    const message = String(err && err.message ? err.message : err);
+    if (
+      message.includes("Executable doesn't exist") ||
+      message.includes('Please run the following command to download new browsers') ||
+      message.includes('browserType.launch')
+    ) {
+      installChromium();
+      return await chromium.launch();
+    }
+
+    throw err;
+  }
 }
 
 // MIME types for static file serving
@@ -93,7 +120,7 @@ function startServer() {
   console.log(`Starting server on port ${PORT}…`);
   const serverProcess = await startServer();
 
-  const browser = await chromium.launch();
+  const browser = await launchBrowser();
 
   try {
     // ── Capture slide screenshots ─────────────────────────────────────────────
