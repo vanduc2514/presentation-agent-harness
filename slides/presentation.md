@@ -121,13 +121,13 @@ Autonomy without runtime control is risk. Customization turns the agent from gen
 
 <p class="eyebrow">Group B · Runtime Sovereignty</p>
 
-# Runtime Sovereignty Example
+# Control the Agent
 
-![Monitoring parallel agent task queues across multiple editor panes](https://images.pexels.com/photos/574071/pexels-photo-574071.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Assign agent task in parallel](images/vscode-multi-agent.png)
 
-![Branching at a safe checkpoint to preserve agent progress](https://images.pexels.com/photos/11035471/pexels-photo-11035471.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Restore to a safe checkpoint](https://preview.redd.it/does-windsurf-have-restore-checkpoints-similar-to-cursor-v0-u2j82imlr3ne1.png?width=744&format=png&auto=webp&s=20ba9f40b0e54d9bf5b5f34265aa467c8abb6c38)
 
-![Spawning sub-agents for parallel delegated work](https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Spawning sub-agents](https://uploads-us-west-2.insided.com/securitygooglecloud-en/attachment/77dd38de-9d6c-47b6-8a13-db3b2cdd7731.png)
 
 ------
 
@@ -135,11 +135,11 @@ Autonomy without runtime control is risk. Customization turns the agent from gen
 
 <p class="eyebrow">Group B · Teaching the Agent</p>
 
-# Teaching the Agent Example
+# Teaching the Agent
 
-![Encoding team conventions and constraints in an AGENTS.md file](https://images.pexels.com/photos/546819/pexels-photo-546819.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Encoding team conventions](images/agents-md.png)
 
-![Configuring custom hooks and model routing per session event](https://images.pexels.com/photos/270360/pexels-photo-270360.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Configuring custom hooks](https://us1.discourse-cdn.com/cursor1/original/3X/f/3/f38edef721403651268a1559d863f6da85491766.png)
 
 ------
 
@@ -166,15 +166,15 @@ Agents write files, run commands, call APIs, and inspect secrets. Trust requires
 
 <p class="eyebrow">Group C · Safety</p>
 
-# Safety Example
+# Restricting the Agent
 
-![Per-tool permission configuration in the IDE settings panel](https://images.pexels.com/photos/60504/security-protection-anti-virus-software-60504.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Allow tool configuration](https://code.visualstudio.com/assets/docs/copilot/chat-tools/agent-mode-select-tools.png)
 
-![Approval gate dialog before a destructive file operation](https://images.pexels.com/photos/325229/pexels-photo-325229.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Approval gate for tool execution](https://antigravity.google/assets/image/docs/always-allow-url.png)
 
-![Prompt injection pattern detected and blocked by the harness](https://images.pexels.com/photos/270348/pexels-photo-270348.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Prompt injection Warning](https://code.visualstudio.com/assets/updates/1_101/fetch-warning.png)
 
-![Agent execution in an isolated sandbox container environment](https://images.pexels.com/photos/1148820/pexels-photo-1148820.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Sanboxing environment](https://code.visualstudio.com/assets/docs/copilot/trust-and-safety/sandbox-prompt.png)
 
 ------
 
@@ -182,13 +182,13 @@ Agents write files, run commands, call APIs, and inspect secrets. Trust requires
 
 <p class="eyebrow">Group C · Observability</p>
 
-# Observability Example
+# Observing the Agent
 
-![Navigating the agent trace to find where reasoning diverged](https://images.pexels.com/photos/590022/pexels-photo-590022.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Navigating the agent trace](images/vscode-agent-debug-logs.png)
 
-![Live tool call timeline with prompt and response inspection](https://images.pexels.com/photos/669996/pexels-photo-669996.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![In-chat Tool Inspection](https://cursor.com/docs-static/images/context/mcp/tool-call.png)
 
-![Debug log capture showing chronological tool call sequence](https://images.pexels.com/photos/574077/pexels-photo-574077.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Troubleshoot Agent Behavior](images/vscode-agent-troubleshooting.png)
 
 ------
 
@@ -213,11 +213,15 @@ The strongest harnesses extend beyond the editor into workflow orchestration.
 
 <p class="eyebrow">Group D · Extended Features</p>
 
-# Extended Features Example
+# Extending the Agent
 
-![Structured requirements spec generated from a plain-language prompt](https://images.pexels.com/photos/3183150/pexels-photo-3183150.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Spec Development Workflow](https://martinfowler.com/articles/exploring-gen-ai/sdd-kiro-tasks-example.png)
 
-![Agent-driven code implementation produced from the approved spec](https://images.pexels.com/photos/270404/pexels-photo-270404.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1)
+![Agent Manager](https://cdn-blog.scalablepath.com/uploads/2025/12/google-antigravity-agent-manager.png)
+
+![Cloud Agent](images/copilot-cloud-agent.png)
+
+![CLI Agent](https://docs.github.com/assets/cb-213582/images/help/copilot/copilot-cli-welcome.png)
 
 ------
 
