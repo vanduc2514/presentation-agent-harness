@@ -25,7 +25,10 @@ const IMAGES_DST = path.join(OUTPUT_DIR, 'images');
 const GITHUB_REPO_URL = 'https://github.com/vanduc2514/presentation-agent-harness';
 
 // ── PDF filename (includes short commit hash for cache-busting) ───────────────
-const GIT_HASH    = execSync('git rev-parse --short=7 HEAD', { cwd: ROOT }).toString().trim();
+// In CI the hash is injected via BUILD_GIT_SHA; fall back to git for local builds.
+const GIT_HASH = process.env.BUILD_GIT_SHA
+  ? process.env.BUILD_GIT_SHA.toString().trim().slice(0, 7)
+  : execSync('git rev-parse --short=7 HEAD', { cwd: ROOT }).toString().trim();
 const PDF_FILENAME = `presentation-agent-harness-${GIT_HASH}.pdf`;
 
 // ── Grid icons (replicated from src/render.js) ────────────────────────────────
