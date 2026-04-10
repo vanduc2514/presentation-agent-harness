@@ -993,6 +993,7 @@ body {
 
   .step-shell,
   .step-content-card {
+    height: auto;
     min-height: 0;
     overflow: visible;
   }
