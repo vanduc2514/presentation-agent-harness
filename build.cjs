@@ -280,7 +280,7 @@ function buildTransformScript(css, gridIconsJson, repoUrl, svgHome, svgPrev, svg
       // Build and append the gallery after text content is processed.
       if (galleryImgData.length > 0) {
         var galleryDiv = document.createElement('div');
-        galleryDiv.className = 'img-gallery';
+        galleryDiv.className = 'img-gallery img-gallery--count-' + galleryImgData.length;
         galleryImgData.forEach(function (data) {
           var figEl = document.createElement('figure');
           figEl.className = 'img-gallery-item';

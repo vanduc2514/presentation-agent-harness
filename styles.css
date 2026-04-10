@@ -469,6 +469,14 @@ body {
   margin-top: 24px;
 }
 
+/* Count-specific column layouts */
+.img-gallery--count-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.img-gallery--count-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.img-gallery--count-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+/* Taller images for 2-col layouts (wider cells need more height) */
+.img-gallery--count-2 .img-gallery-item img { height: 260px; }
+
 .img-gallery-item {
   margin: 0;
   border-radius: 16px;
