@@ -258,3 +258,15 @@ Every major IDE can access strong models. Durable advantage now comes from harne
 - Stay the pilot of the agent loop.
 - Never compromise on safety primitives.
 - Keep evaluating through real work, not demos.
+
+------
+
+<!--slide-attr x=6000,y=8200,rotate=-3,scale=1.8,id=thank-you,theme=closing -->
+
+<p class="eyebrow">Thank You</p>
+
+# Thanks for Listening
+
+Questions, feedback, or just want to talk shop?
+
+Find me on GitHub: [github.com/vanduc2514](https://github.com/vanduc2514)
