@@ -4,8 +4,6 @@
 
 A non-linear presentation on how to assess modern IDEs as agent harnesses rather than just code editors. The slides walk through the fundamentals that still define a capable IDE, how the architecture shifts when an AI agent is in the loop, and a structured framework for evaluating harness quality across four dimensions.
 
-Live at [slides.nvduc.dev](https://slides.nvduc.dev).
-
 ## Background
 
 As AI-native IDEs have multiplied, the common approach to evaluation — comparing model quality or autocomplete speed — misses the more meaningful question: how well does the IDE manage context, tools, state, and control on behalf of the developer?
