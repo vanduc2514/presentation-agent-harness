@@ -2,9 +2,7 @@
 
 Đây là bài thuyết trình về việc nhìn nhận các IDE hiện đại theo một góc độ khác — không phải là công cụ soạn thảo code, mà là nền tảng để chạy AI agent. Bài này đi qua những yếu tố cốt lõi tạo nên một IDE tốt, lý do tại sao kiến trúc thay đổi khi có agent tham gia, và cách đánh giá khả năng "harness" theo bốn tiêu chí cụ thể.
 
-Xem trực tiếp tại [slides.nvduc.dev](https://slides.nvduc.dev).
-
-## Câu chuyện
+## Bối cảnh
 
 Dạo gần đây IDE tích hợp AI xuất hiện nhiều. Cách đánh giá phổ biến nhất vẫn là: model này mạnh không, autocomplete nhanh không? Nhưng đó không phải câu hỏi quan trọng nhất. Điều thực sự cần hỏi là: IDE đó có giúp agent làm việc hiệu quả không, hay chỉ là thêm một lớp UI trên cùng một LLM?
 
